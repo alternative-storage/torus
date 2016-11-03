@@ -52,7 +52,12 @@ var rootCommand = &cobra.Command{
 	Short:  "Torus distributed storage",
 	Long:   `The torus distributed storage server.`,
 	PreRun: configureServer,
-	Run:    runServer,
+	Run: func(cmd *cobra.Command, args []string) {
+		err := runServer(cmd, args)
+		if err != nil {
+			die("%v", err)
+		}
+	},
 }
 
 func init() {
@@ -139,7 +144,7 @@ func parsePercentage(percentString string) (uint64, error) {
 	return uint64(sizeNumber), nil
 }
 
-func runServer(cmd *cobra.Command, args []string) {
+func runServer(cmd *cobra.Command, args []string) error {
 	if completion {
 		cmd.Root().GenBashCompletion(os.Stdout)
 		os.Exit(0)
@@ -161,7 +166,7 @@ func runServer(cmd *cobra.Command, args []string) {
 			if err == torus.ErrExists {
 				fmt.Println("debug-init: Already exists")
 			} else {
-				die("Couldn't debug-init: %s", err)
+				return fmt.Errorf("Couldn't debug-init: %s", err)
 			}
 		}
 		fallthrough
@@ -171,13 +176,13 @@ func runServer(cmd *cobra.Command, args []string) {
 		srv, err = torus.NewServer(cfg, "etcd", "mfile")
 	}
 	if err != nil {
-		die("Couldn't start: %s", err)
+		return fmt.Errorf("Couldn't start: %s", err)
 	}
 
 	if autojoin {
 		err = doAutojoin(srv)
 		if err != nil {
-			die("Couldn't auto-join: %s", err)
+			return fmt.Errorf("Couldn't auto-join: %s", err)
 		}
 	}
 
@@ -190,11 +195,11 @@ func runServer(cmd *cobra.Command, args []string) {
 
 		u, err = url.Parse(peerAddress)
 		if err != nil {
-			die("Couldn't parse peer address %s: %s", peerAddress, err)
+			return fmt.Errorf("Couldn't parse peer address %s: %s", peerAddress, err)
 		}
 
 		if u.Scheme == "" {
-			die("Peer address %s does not have URL scheme (http:// or tdp://)", peerAddress)
+			return fmt.Errorf("Peer address %s does not have URL scheme (http:// or tdp://)", peerAddress)
 		}
 
 		err = distributor.ListenReplication(srv, u)
@@ -212,13 +217,14 @@ func runServer(cmd *cobra.Command, args []string) {
 	}()
 
 	if err != nil {
-		die("couldn't use server: %s", err)
+		return fmt.Errorf("couldn't use server: %s", err)
 	}
 	if httpAddress != "" {
 		http.ServeHTTP(httpAddress, srv)
 	}
 	// Wait
 	<-mainClose
+	return nil
 }
 
 // doAutojoin automatically adds nodes to the storage pool.
