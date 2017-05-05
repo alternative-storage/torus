@@ -12,6 +12,7 @@ import (
 )
 
 func initEtcdMetadata(cfg torus.Config, gmd torus.GlobalMetadata, ringType torus.RingType) error {
+	clog.Tracef("Initializing etcd metadata at %v", cfg.MetadataAddress)
 	gmdbytes, err := json.Marshal(gmd)
 	if err != nil {
 		return err
@@ -56,6 +57,7 @@ func initEtcdMetadata(cfg torus.Config, gmd torus.GlobalMetadata, ringType torus
 }
 
 func wipeEtcdMetadata(cfg torus.Config) error {
+	clog.Tracef("Wiping etcd metadata at %v", cfg.MetadataAddress)
 	client, err := etcdv3.New(etcdv3.Config{Endpoints: []string{cfg.MetadataAddress}, TLS: cfg.TLS})
 	if err != nil {
 		return err
@@ -69,6 +71,7 @@ func wipeEtcdMetadata(cfg torus.Config) error {
 }
 
 func setRing(cfg torus.Config, r torus.Ring) error {
+	clog.Tracef("Setting ring data at %v", cfg.MetadataAddress)
 	client, err := etcdv3.New(etcdv3.Config{Endpoints: []string{cfg.MetadataAddress}, TLS: cfg.TLS})
 	if err != nil {
 		return err
