@@ -27,6 +27,7 @@ func MkdirsFor(dir string) error {
 }
 
 func NewServer(cfg Config, metadataServiceKind, blockStoreKind string) (*Server, error) {
+	clog.Tracef("starting %s server...", blockStoreKind)
 	err := MkdirsFor(cfg.DataDir)
 	if err != nil {
 		return nil, err
@@ -46,6 +47,7 @@ func NewServer(cfg Config, metadataServiceKind, blockStoreKind string) (*Server,
 	return NewServerByImpl(cfg, mds, blocks)
 }
 
+// NewMemoryServer is used only by test case.
 func NewMemoryServer() *Server {
 	cfg := Config{
 		StorageSize: 100 * 1024 * 1024,

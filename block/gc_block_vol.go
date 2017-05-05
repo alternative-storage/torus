@@ -101,9 +101,6 @@ func (b *blockvolGC) IsDead(ref torus.BlockRef) bool {
 	}
 	// If it's a new block or INode, let it be.
 	if ref.INode >= v {
-		if clog.LevelAt(capnslog.TRACE) {
-			clog.Tracef("%s is new compared to %d", ref, v)
-		}
 		return false
 	}
 	// If it's an INode block, and it's not in our list

@@ -89,7 +89,7 @@ func RegisterMetadataService(name string, newFunc CreateMetadataServiceFunc) {
 // CreateMetadataService calls the constructor of the specified MetadataService
 // with the provided address.
 func CreateMetadataService(name string, cfg Config) (MetadataService, error) {
-	clog.Infof("creating metadata service: %s", name)
+	clog.Infof("constructing metadata service: %s", name)
 
 	if mdsf, ok := metadataServices[name]; ok {
 		return mdsf(cfg)

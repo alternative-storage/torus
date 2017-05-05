@@ -62,7 +62,6 @@ func loadIndex(m *MFile) (map[torus.BlockRef]int, error) {
 }
 
 func newMFileBlockStore(name string, cfg torus.Config, meta torus.GlobalMetadata) (torus.BlockStore, error) {
-
 	storageSize := cfg.StorageSize
 	offset := cfg.StorageSize % meta.BlockSize
 	if offset != 0 {
@@ -75,10 +74,12 @@ func newMFileBlockStore(name string, cfg torus.Config, meta torus.GlobalMetadata
 	promBlocksAvail.WithLabelValues(name).Set(float64(nBlocks))
 	dpath := filepath.Join(cfg.DataDir, "block", fmt.Sprintf("data-%s.blk", name))
 	mpath := filepath.Join(cfg.DataDir, "block", fmt.Sprintf("map-%s.blk", name))
+	clog.Tracef("using block mfile: %v\n", dpath)
 	d, err := CreateOrOpenMFile(dpath, storageSize, meta.BlockSize)
 	if err != nil {
 		return nil, err
 	}
+	clog.Tracef("using block mfile: %v\n", mpath)
 	m, err := CreateOrOpenMFile(mpath, nBlocks*torus.BlockRefByteSize, torus.BlockRefByteSize)
 	if err != nil {
 		return nil, err
@@ -187,6 +188,7 @@ func (m *mfileBlock) findEmpty() int {
 }
 
 func (m *mfileBlock) HasBlock(_ context.Context, s torus.BlockRef) (bool, error) {
+	clog.Tracef("mfile: checking if has %v", s)
 	m.mut.RLock()
 	defer m.mut.RUnlock()
 	index := m.findIndex(s)
@@ -208,7 +210,7 @@ func (m *mfileBlock) GetBlock(_ context.Context, s torus.BlockRef) ([]byte, erro
 		promBlocksFailed.WithLabelValues(m.name).Inc()
 		return nil, torus.ErrBlockNotExist
 	}
-	clog.Tracef("mfile: getting block at index %d", index)
+	clog.Tracef("mfile: getting block %v at index %d", s, index)
 	promBlocksRetrieved.WithLabelValues(m.name).Inc()
 	return m.dataFile.GetBlock(uint64(index)), nil
 }

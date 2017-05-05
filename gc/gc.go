@@ -29,7 +29,7 @@ type INodeFetcher interface {
 func NewGCController(srv *torus.Server, inodes INodeFetcher) GC {
 	var gcs []GC
 	for k, v := range gcFuncs {
-		clog.Debugf("creating %s gc", k)
+		clog.Debugf("creating garvage corrector for %s", k)
 		gc, err := v(srv, inodes)
 		if err != nil {
 			clog.Errorf("cannot create gc %s: %v", k, err)

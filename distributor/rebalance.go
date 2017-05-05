@@ -52,6 +52,7 @@ exit:
 			clog.Error(err)
 		}
 		for _, x := range volset {
+			clog.Tracef("checking volume %v...", x.Name)
 			err := d.rebalancer.PrepVolume(x)
 			if err != nil {
 				clog.Errorf("gc prep for %s failed: %s", x.Name, err)
@@ -84,6 +85,7 @@ exit:
 						info.Rebalancing = false
 					}
 					d.srv.UpdateRebalanceInfo(info)
+					clog.Tracef("finished rebalance/gc cycle. ring version is %v", d.ring.Version())
 					break ratelimit
 				} else if err != nil {
 					// This is usually really bad

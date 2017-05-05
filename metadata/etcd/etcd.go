@@ -308,6 +308,7 @@ func (c *etcdCtx) GetVolumes() ([]*models.Volume, torus.VolumeID, error) {
 		}
 		out = append(out, v)
 	}
+	clog.Tracef("got volume list: %v", out)
 	return out, torus.VolumeID(highwater), nil
 }
 
@@ -340,6 +341,7 @@ func (c *etcdCtx) GetVolume(volume string) (*models.Volume, error) {
 		return nil, err
 	}
 	c.etcd.volumesCache[volume] = v
+	clog.Tracef("got volume: %v", volume)
 	return v, nil
 }
 
@@ -393,6 +395,7 @@ func (c *etcdCtx) getRing() (torus.Ring, int64, error) {
 	if err != nil {
 		return nil, 0, err
 	}
+	clog.Tracef("got ring version: %v", resp.Kvs[0].Version)
 	return ring, resp.Kvs[0].Version, nil
 }
 
@@ -429,6 +432,7 @@ func (c *etcdCtx) SetRing(ring torus.Ring) error {
 	if resp.Succeeded {
 		return nil
 	}
+	clog.Tracef("set ring version: %v", ring.Version())
 	return torus.ErrAgain
 }
 
@@ -441,6 +445,7 @@ func (c *etcdCtx) CommitINodeIndex(vid torus.VolumeID) (torus.INodeID, error) {
 	if err != nil {
 		return 0, err
 	}
+	clog.Tracef("commited inode index: %v", vid)
 	return torus.INodeID(newID.(uint64)), nil
 }
 
@@ -452,6 +457,7 @@ func (c *etcdCtx) NewVolumeID() (torus.VolumeID, error) {
 	if err != nil {
 		return 0, err
 	}
+	clog.Tracef("made new volume ID: %v", newID)
 	return torus.VolumeID(newID.(uint64)), nil
 }
 
@@ -467,5 +473,6 @@ func (c *etcdCtx) GetINodeIndex(vid torus.VolumeID) (torus.INodeID, error) {
 		return torus.INodeID(0), torus.ErrNotExist
 	}
 	id := BytesToUint64(resp.Kvs[0].Value)
+	clog.Tracef("god INode Index: %v", id)
 	return torus.INodeID(id), nil
 }
