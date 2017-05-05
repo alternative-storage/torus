@@ -11,6 +11,7 @@ import (
 )
 
 var (
+        logpkg   string
 	debug bool
 )
 
@@ -36,6 +37,7 @@ var versionCommand = &cobra.Command{
 
 func init() {
 	rootCommand.PersistentFlags().BoolVarP(&debug, "debug", "", false, "enable debug logging")
+	rootCommand.PersistentFlags().StringVarP(&logpkg, "logpkg", "", "", "Specific package logging")
 	rootCommand.AddCommand(initCommand)
 	rootCommand.AddCommand(blockCommand)
 	rootCommand.AddCommand(listPeersCommand)
@@ -61,4 +63,14 @@ func configure(cmd *cobra.Command, args []string) {
 	if debug {
 		capnslog.SetGlobalLogLevel(capnslog.DEBUG)
 	}
+        if logpkg != "" {
+                capnslog.SetGlobalLogLevel(capnslog.NOTICE)
+                rl := capnslog.MustRepoLogger("github.com/coreos/torus")
+                llc, err := rl.ParseLogLevelConfig(logpkg)
+                if err != nil {
+                        fmt.Fprintf(os.Stderr, "error parsing logpkg: %s\n", err)
+                        os.Exit(1)
+                }
+                rl.SetLogLevel(llc)
+        }
 }
