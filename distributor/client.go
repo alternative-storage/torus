@@ -2,11 +2,15 @@ package distributor
 
 import (
 	"net/url"
+	"runtime/debug"
 	"sync"
 	"time"
 
 	"github.com/coreos/torus"
 	"github.com/coreos/torus/distributor/protocols"
+	"github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go/log"
+
 	"golang.org/x/net/context"
 )
 
@@ -19,15 +23,18 @@ const (
 
 // TODO(barakmich): Clean up errors
 
+// distClient used by client side as a Distributor with connection.
 type distClient struct {
 	dist *Distributor
 	//TODO(barakmich): Better connection pooling
 	openConns map[string]protocols.RPC
 	mut       sync.Mutex
+
+	tracer opentracing.Tracer
 }
 
+// newDistClient returns distClient.
 func newDistClient(d *Distributor) *distClient {
-
 	client := &distClient{
 		dist:      d,
 		openConns: make(map[string]protocols.RPC),
@@ -50,6 +57,8 @@ func (d *distClient) onPeerTimeout(uuid string) {
 	delete(d.openConns, uuid)
 
 }
+
+// getConn returns RPC interface after found proper peers.
 func (d *distClient) getConn(uuid string) protocols.RPC {
 	d.mut.Lock()
 	if conn, ok := d.openConns[uuid]; ok {
@@ -88,6 +97,7 @@ func (d *distClient) getConn(uuid string) protocols.RPC {
 	return conn
 }
 
+// resetConn resets connection for the uuid.
 func (d *distClient) resetConn(uuid string) {
 	d.mut.Lock()
 	defer d.mut.Unlock()
@@ -102,6 +112,7 @@ func (d *distClient) resetConn(uuid string) {
 	}
 }
 
+// Close closes all opened connections.
 func (d *distClient) Close() error {
 	d.mut.Lock()
 	defer d.mut.Unlock()
@@ -114,6 +125,7 @@ func (d *distClient) Close() error {
 	return nil
 }
 
+// GetBlock starts RPC call to get data.
 func (d *distClient) GetBlock(ctx context.Context, uuid string, b torus.BlockRef) ([]byte, error) {
 	conn := d.getConn(uuid)
 	if conn == nil {
@@ -128,7 +140,20 @@ func (d *distClient) GetBlock(ctx context.Context, uuid string, b torus.BlockRef
 	return data, nil
 }
 
+// PutBlock starts RPC call to put data.
 func (d *distClient) PutBlock(ctx context.Context, uuid string, b torus.BlockRef, data []byte) error {
+	if span := opentracing.SpanFromContext(ctx); span != nil {
+		span := d.tracer.StartSpan("PutBlock on RPC client", opentracing.ChildOf(span.Context()))
+		span.SetTag("write", "put start")
+		span.LogFields(
+			log.String("write", "writing..."),
+			log.String("uuid", "TODO"))
+		defer span.Finish()
+		ctx = opentracing.ContextWithSpan(ctx, span)
+	} else {
+		//		debug.PrintStack()
+		clog.Info("ng-12")
+	}
 	conn := d.getConn(uuid)
 	if conn == nil {
 		return torus.ErrNoPeer

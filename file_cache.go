@@ -3,14 +3,17 @@ package torus
 import (
 	"time"
 
+	"github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go/log"
+
 	"golang.org/x/net/context"
 )
 
 type fileCache interface {
 	newINode(ref INodeRef)
-	writeToBlock(ctx context.Context, i, from, to int, data []byte) (int, error)
-	getBlock(ctx context.Context, i int) ([]byte, error)
-	sync(context.Context) error
+	writeToBlock(ctx context.Context, i, from, to int, data []byte, tracer opentracing.Tracer) (int, error)
+	getBlock(ctx context.Context, i int, tracer opentracing.Tracer) ([]byte, error)
+	sync(context.Context, opentracing.Tracer) error
 }
 
 type singleBlockCache struct {
@@ -27,6 +30,8 @@ type singleBlockCache struct {
 	readData []byte
 
 	blkSize uint64
+
+	tracer opentracing.Tracer
 }
 
 func newSingleBlockCache(bs Blockset, blkSize uint64) *singleBlockCache {
@@ -47,7 +52,8 @@ func (sb *singleBlockCache) openBlock(ctx context.Context, i int) error {
 		return nil
 	}
 	if sb.openWrote {
-		err := sb.sync(ctx)
+		// call sync
+		err := sb.sync(ctx, sb.tracer)
 		if err != nil {
 			return err
 		}
@@ -69,7 +75,7 @@ func (sb *singleBlockCache) openBlock(ctx context.Context, i int) error {
 		return nil
 	}
 	start := time.Now()
-	d, err := sb.blocks.GetBlock(ctx, i)
+	d, err := sb.blocks.GetBlock(ctx, i, sb.tracer)
 	if err != nil {
 		return err
 	}
@@ -80,7 +86,16 @@ func (sb *singleBlockCache) openBlock(ctx context.Context, i int) error {
 	return nil
 }
 
-func (sb *singleBlockCache) writeToBlock(ctx context.Context, i, from, to int, data []byte) (int, error) {
+func (sb *singleBlockCache) writeToBlock(ctx context.Context, i, from, to int, data []byte, tracer opentracing.Tracer) (int, error) {
+	if span := opentracing.SpanFromContext(ctx); span != nil {
+		span := tracer.StartSpan("write to memory", opentracing.ChildOf(span.Context()))
+		span.SetTag("second", "write to memory")
+		span.LogFields(
+			log.String("writeToBlock", "writing..."))
+		ctx = opentracing.ContextWithSpan(ctx, span)
+		defer span.Finish()
+	}
+	sb.tracer = tracer
 	if sb.openIdx != i {
 		err := sb.openBlock(ctx, i)
 		if err != nil {
@@ -94,21 +109,38 @@ func (sb *singleBlockCache) writeToBlock(ctx context.Context, i, from, to int, d
 	return copy(sb.openData[from:to], data), nil
 }
 
-func (sb *singleBlockCache) sync(ctx context.Context) error {
+func (sb *singleBlockCache) sync(ctx context.Context, tracer opentracing.Tracer) error {
+	if span := opentracing.SpanFromContext(ctx); span != nil {
+		span := tracer.StartSpan("sync", opentracing.ChildOf(span.Context()))
+		span.SetTag("syncing...", "syncing...")
+		span.LogFields(
+			log.String("writeToBlock", "writing..."))
+		//log.Int("blkIndex", "TODO"))
+		ctx = opentracing.ContextWithSpan(ctx, span)
+		defer span.Finish()
+	}
+
 	if !sb.openWrote {
 		return nil
 	}
 	start := time.Now()
-	err := sb.blocks.PutBlock(ctx, sb.ref, sb.openIdx, sb.openData)
+	err := sb.blocks.PutBlock(ctx, sb.ref, sb.openIdx, sb.openData, tracer)
 	delta := time.Since(start)
 	promFileBlockWrite.Observe(float64(delta.Nanoseconds()) / 1000)
 	sb.openWrote = false
 	return err
 }
 
-func (sb *singleBlockCache) openRead(ctx context.Context, i int) error {
+// openRead gets the data gets the data from local or peers.
+func (sb *singleBlockCache) openRead(ctx context.Context, i int, tracer opentracing.Tracer) error {
+	if span := opentracing.SpanFromContext(ctx); span != nil {
+		span := tracer.StartSpan("read data part 2", opentracing.ChildOf(span.Context()))
+		ctx = opentracing.ContextWithSpan(ctx, span)
+		defer span.Finish()
+	}
+	sb.tracer = tracer
 	start := time.Now()
-	d, err := sb.blocks.GetBlock(ctx, i)
+	d, err := sb.blocks.GetBlock(ctx, i, tracer)
 	if err != nil {
 		return err
 	}
@@ -119,12 +151,19 @@ func (sb *singleBlockCache) openRead(ctx context.Context, i int) error {
 	return nil
 }
 
-func (sb *singleBlockCache) getBlock(ctx context.Context, i int) ([]byte, error) {
+func (sb *singleBlockCache) getBlock(ctx context.Context, i int, tracer opentracing.Tracer) ([]byte, error) {
+	if span := opentracing.SpanFromContext(ctx); span != nil {
+		span := tracer.StartSpan("read data", opentracing.ChildOf(span.Context()))
+		ctx = opentracing.ContextWithSpan(ctx, span)
+		defer span.Finish()
+	}
+	sb.tracer = tracer
+
 	if sb.openIdx == i {
 		return sb.openData, nil
 	}
 	if sb.readIdx != i {
-		err := sb.openRead(ctx, i)
+		err := sb.openRead(ctx, i, sb.tracer)
 		if err != nil {
 			return nil, err
 		}

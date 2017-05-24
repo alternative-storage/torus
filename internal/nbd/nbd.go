@@ -79,6 +79,7 @@ type Device interface {
 	Close() error
 }
 
+// NBD implements nbd device operations.
 type NBD struct {
 	device    Device
 	size      int64
@@ -323,7 +324,6 @@ func (c *serverConn) serveLoop(dev Device, wg *sync.WaitGroup) error {
 			}
 		}
 		c.mu.Unlock()
-
 		switch cmd {
 		case cmdRead:
 			buf = hdr.resize(buf)

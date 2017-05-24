@@ -231,6 +231,7 @@ func runServer(cmd *cobra.Command, args []string) {
 	<-mainClose
 }
 
+// doAutojoin automatically adds nodes to the storage pool.
 func doAutojoin(s *torus.Server) error {
 	for {
 		ring, err := s.MDS.GetRing()

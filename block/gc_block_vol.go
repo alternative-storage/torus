@@ -67,7 +67,8 @@ func (b *blockvolGC) PrepVolume(vol *models.Volume) error {
 	}
 
 	for _, x := range curINodes {
-		inode, err := b.inodes.GetINode(b.getContext(), x)
+		// TODO: check 3rd
+		inode, err := b.inodes.GetINode(b.getContext(), x, nil)
 		if err != nil {
 			return err
 		}

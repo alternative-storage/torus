@@ -8,6 +8,8 @@ import (
 	"github.com/RoaringBitmap/roaring"
 	"github.com/coreos/pkg/capnslog"
 	"github.com/coreos/torus"
+
+	"github.com/opentracing/opentracing-go"
 )
 
 type baseBlockset struct {
@@ -44,7 +46,7 @@ func (b *baseBlockset) Kind() uint32 {
 	return uint32(Base)
 }
 
-func (b *baseBlockset) GetBlock(ctx context.Context, i int) ([]byte, error) {
+func (b *baseBlockset) GetBlock(ctx context.Context, i int, tracer opentracing.Tracer) ([]byte, error) {
 	if i >= len(b.blocks) {
 		return nil, torus.ErrBlockNotExist
 	}
@@ -54,7 +56,7 @@ func (b *baseBlockset) GetBlock(ctx context.Context, i int) ([]byte, error) {
 	if torus.BlockLog.LevelAt(capnslog.TRACE) {
 		torus.BlockLog.Tracef("base: getting block %d at BlockID %s", i, b.blocks[i])
 	}
-	bytes, err := b.store.GetBlock(ctx, b.blocks[i])
+	bytes, err := b.store.GetBlock(ctx, b.blocks[i], tracer)
 	if err != nil {
 		promBaseFail.Inc()
 		return nil, err
@@ -62,7 +64,7 @@ func (b *baseBlockset) GetBlock(ctx context.Context, i int) ([]byte, error) {
 	return bytes, err
 }
 
-func (b *baseBlockset) PutBlock(ctx context.Context, inode torus.INodeRef, i int, data []byte) error {
+func (b *baseBlockset) PutBlock(ctx context.Context, inode torus.INodeRef, i int, data []byte, tracer opentracing.Tracer) error {
 	if i > len(b.blocks) {
 		return torus.ErrBlockNotExist
 	}
@@ -79,7 +81,8 @@ func (b *baseBlockset) PutBlock(ctx context.Context, inode torus.INodeRef, i int
 	if torus.BlockLog.LevelAt(capnslog.TRACE) {
 		torus.BlockLog.Tracef("base: writing block %d at BlockID %s", i, newBlockID)
 	}
-	err := b.store.WriteBlock(ctx, newBlockID, data)
+	// write data via storage's WriteBlock.
+	err := b.store.WriteBlock(ctx, newBlockID, data, tracer)
 	if err != nil {
 		return err
 	}

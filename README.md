@@ -15,15 +15,7 @@ Sharding is done via a consistent hash function, controlled in the simple case b
 
 ## Project Status
 
-Development on Torus at CoreOS stopped as of Feb 2017. We started [Torus as a prototype](https://coreos.com/blog/torus-distributed-storage-by-coreos.html) in June 2016 to build a storage system that could be easily operated on top of Kubernetes. We have proven out that model with this project. But, we didn't achieve the development velocity over the 8 months that we had hoped for when we started out, and as such we didn't achieve the depth of community engagement we had hoped for either.
-
-If you have immediate storage needs Kubernetes can plugin to [dozens of other storage options](https://kubernetes.io/docs/user-guide/volumes/) including AWS/Azure/Google/OpenStack/etc block storage, Ceph, Gluster, NFS, etc that are external to Kubernetes.
-
-We are also seeing the emergence of projects, like [rook](https://github.com/rook/rook/tree/master/demo/kubernetes), which creates a storage system that is ran on top of Kubernetes, as an [Operator](https://coreos.com/blog/introducing-operators.html). We expect to see more systems like this in the future, because Kubernetes is a perfect platform for running distributed storage systems.
-
-If you are interested in continuing the project feel free to fork and continue; we can update this README if a particular fork gets solid traction.
-
-For further questions email brandon.philips@coreos.com.
+unknown
 
 ## Trying out Torus
 
@@ -32,7 +24,6 @@ To get started quicky using Torus for the first time, start with the guide to [r
 ## Contributing to Torus
 
 Torus is an open source project and contributors are welcome!
-Join us on IRC at [#coreos on freenode.net](http://webchat.freenode.net/?channels=%23coreos&uio=d4), [file an issue](https://github.com/coreos/torus/issues) here on Github, check out bigger plans on the [kind/design](https://github.com/coreos/torus/labels/kind%2Fdesign) tag, contribute on bugs that are [low hanging fruit](https://github.com/coreos/torus/labels/low%20hanging%20fruit) for issue ideas and check the [project layout](Documentation/project-layout.md) for a guide to the sections that might interest you.
 
 ## Licensing
 

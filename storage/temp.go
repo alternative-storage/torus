@@ -3,6 +3,7 @@ package storage
 import (
 	"sync"
 
+	"github.com/opentracing/opentracing-go"
 	"golang.org/x/net/context"
 
 	"github.com/coreos/torus"
@@ -67,7 +68,7 @@ func (t *tempBlockStore) HasBlock(_ context.Context, s torus.BlockRef) (bool, er
 	return ok, nil
 }
 
-func (t *tempBlockStore) GetBlock(_ context.Context, s torus.BlockRef) ([]byte, error) {
+func (t *tempBlockStore) GetBlock(_ context.Context, s torus.BlockRef, _ opentracing.Tracer) ([]byte, error) {
 	t.mut.RLock()
 	defer t.mut.RUnlock()
 
@@ -85,7 +86,7 @@ func (t *tempBlockStore) GetBlock(_ context.Context, s torus.BlockRef) ([]byte, 
 	return x, nil
 }
 
-func (t *tempBlockStore) WriteBlock(_ context.Context, s torus.BlockRef, data []byte) error {
+func (t *tempBlockStore) WriteBlock(_ context.Context, s torus.BlockRef, data []byte, _ opentracing.Tracer) error {
 	t.mut.Lock()
 	defer t.mut.Unlock()
 

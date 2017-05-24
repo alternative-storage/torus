@@ -3,12 +3,16 @@ package grpc
 import (
 	"net"
 	"net/url"
+	"runtime/debug"
 	"strings"
 	"time"
 
 	"google.golang.org/grpc"
 
 	"golang.org/x/net/context"
+
+	"github.com/coreos/torus/jaeger"
+	"github.com/opentracing/opentracing-go"
 
 	"github.com/coreos/torus"
 	"github.com/coreos/torus/distributor/protocols"
@@ -65,6 +69,18 @@ func (c *client) Close() error {
 }
 
 func (c *client) PutBlock(ctx context.Context, ref torus.BlockRef, data []byte) error {
+	//debug.PrintStack()
+	tracer := jaeger.Init("torusd Distributor Server")
+	if span := opentracing.SpanFromContext(ctx); span != nil {
+		span := tracer.StartSpan("server side", opentracing.ChildOf(span.Context()))
+		span.SetTag("second", "abc")
+		ctx = opentracing.ContextWithSpan(ctx, span)
+		defer span.Finish()
+	} else {
+		//clog.Infof("ng-110")
+		debug.PrintStack()
+	}
+	// TODO not necessary(?)
 	_, err := c.handler.PutBlock(ctx, &models.PutBlockRequest{
 		Refs: []*models.BlockRef{
 			ref.ToProto(),
@@ -119,6 +135,7 @@ func (h *handler) Block(ctx context.Context, req *models.BlockRequest) (*models.
 }
 
 func (h *handler) PutBlock(ctx context.Context, req *models.PutBlockRequest) (*models.PutResponse, error) {
+	//debug.PrintStack()
 	for i, ref := range req.Refs {
 		err := h.handle.PutBlock(ctx, torus.BlockFromProto(ref), req.Blocks[i])
 		if err != nil {

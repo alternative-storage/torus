@@ -8,12 +8,18 @@ import (
 	"github.com/barakmich/mmap-go"
 )
 
+// MFile writes blocks and gets n-th block.
 type MFile struct {
-	mmap    mmap.MMap
+	mmap mmap.MMap
+	// blkSize is a size of each block of MFile.
 	blkSize uint64
-	size    uint64
+	// size is a size of MFIle.
+	size uint64
+
+	//tracer opentracing.Tracer
 }
 
+// CreateOrOpenMFile creates or open MFile.
 func CreateOrOpenMFile(path string, size uint64, blkSize uint64) (*MFile, error) {
 	finfo, err := os.Stat(path)
 	if os.IsNotExist(err) {
@@ -32,6 +38,7 @@ func CreateOrOpenMFile(path string, size uint64, blkSize uint64) (*MFile, error)
 	return OpenMFile(path, blkSize)
 }
 
+// CreateMFile creates MFile with path and size.
 func CreateMFile(path string, size uint64) error {
 	f, err := os.Create(path)
 	if err != nil {
@@ -41,6 +48,7 @@ func CreateMFile(path string, size uint64) error {
 	return f.Truncate(int64(size))
 }
 
+// OpenMFile opens and returns MFile struct.
 func OpenMFile(path string, blkSize uint64) (*MFile, error) {
 	var mf MFile
 
@@ -105,10 +113,12 @@ func (m *MFile) WriteBlock(n uint64, data []byte) error {
 	return nil
 }
 
+// Flush synchronizes themapping's contents to the file's by calling FlushAsync implemented in mmap-go.
 func (m *MFile) Flush() error {
 	return m.mmap.FlushAsync()
 }
 
+// Close synchonizes and deletes the memory map.
 func (m *MFile) Close() error {
 	if err := m.mmap.Flush(); err != nil {
 		return err

@@ -12,6 +12,9 @@ import (
 	"github.com/coreos/torus/distributor/protocols"
 	"github.com/coreos/torus/distributor/rebalance"
 	"github.com/coreos/torus/gc"
+
+	"github.com/opentracing/opentracing-go"
+	"golang.org/x/net/context"
 )
 
 var (
@@ -32,6 +35,9 @@ type Distributor struct {
 	ringWatcherChan chan struct{}
 	rebalancer      rebalance.Rebalancer
 	rebalancing     bool
+
+	ctx    context.Context // for jaeger
+	tracer opentracing.Tracer
 }
 
 func newDistributor(srv *torus.Server, addr *url.URL) (*Distributor, error) {

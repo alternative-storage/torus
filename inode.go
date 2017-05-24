@@ -5,6 +5,7 @@ import (
 
 	"github.com/coreos/pkg/capnslog"
 	"github.com/coreos/torus/models"
+	"github.com/opentracing/opentracing-go"
 	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/net/context"
 )
@@ -42,7 +43,7 @@ func (b *INodeStore) Close() error {
 	return b.bs.Close()
 }
 
-func (b *INodeStore) WriteINode(ctx context.Context, i INodeRef, inode *models.INode) error {
+func (b *INodeStore) WriteINode(ctx context.Context, i INodeRef, inode *models.INode, tracer opentracing.Tracer) error {
 	if i.INode == 0 {
 		panic("Writing zero inode")
 	}
@@ -69,7 +70,7 @@ func (b *INodeStore) WriteINode(ctx context.Context, i INodeRef, inode *models.I
 		if BlockLog.LevelAt(capnslog.TRACE) {
 			BlockLog.Tracef("writing inode block: %s", ref)
 		}
-		err := b.bs.WriteBlock(ctx, ref, buf)
+		err := b.bs.WriteBlock(ctx, ref, buf, tracer)
 		if err != nil {
 			return err
 		}
@@ -80,7 +81,7 @@ func (b *INodeStore) WriteINode(ctx context.Context, i INodeRef, inode *models.I
 	return nil
 }
 
-func (b *INodeStore) GetINode(ctx context.Context, i INodeRef) (*models.INode, error) {
+func (b *INodeStore) GetINode(ctx context.Context, i INodeRef, tracer opentracing.Tracer) (*models.INode, error) {
 	if i.INode == 0 {
 		panic("Fetching zero inode")
 	}
@@ -91,7 +92,7 @@ func (b *INodeStore) GetINode(ctx context.Context, i INodeRef) (*models.INode, e
 		Index:    IndexID(index),
 	}
 	ref.SetBlockType(TypeINode)
-	data, err := b.bs.GetBlock(ctx, ref)
+	data, err := b.bs.GetBlock(ctx, ref, tracer)
 	if err != nil {
 		promINodeFailures.Inc()
 		return nil, err
@@ -108,7 +109,7 @@ func (b *INodeStore) GetINode(ctx context.Context, i INodeRef) (*models.INode, e
 				Index:    IndexID(index),
 			}
 			ref.SetBlockType(TypeINode)
-			data, err = b.bs.GetBlock(ctx, ref)
+			data, err = b.bs.GetBlock(ctx, ref, tracer)
 			if err != nil {
 				promINodeFailures.Inc()
 				clog.Errorf("inode: couldn't get inode block: %s -- %s", err, ref)
@@ -129,7 +130,7 @@ func (b *INodeStore) GetINode(ctx context.Context, i INodeRef) (*models.INode, e
 	return out, nil
 }
 
-func (b *INodeStore) DeleteINode(ctx context.Context, i INodeRef) error {
+func (b *INodeStore) DeleteINode(ctx context.Context, i INodeRef, tracer opentracing.Tracer) error {
 	if i.INode == 0 {
 		panic("Deleting zero inode")
 	}
@@ -138,7 +139,7 @@ func (b *INodeStore) DeleteINode(ctx context.Context, i INodeRef) error {
 		Index:    IndexID(1),
 	}
 	ref.SetBlockType(TypeINode)
-	data, err := b.bs.GetBlock(ctx, ref)
+	data, err := b.bs.GetBlock(ctx, ref, tracer)
 	if err != nil {
 		return err
 	}

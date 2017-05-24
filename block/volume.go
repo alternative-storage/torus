@@ -73,7 +73,8 @@ func (s *BlockVolume) getOrCreateBlockINode(ref torus.INodeRef) (*models.INode, 
 		panic("ids managed by metadata didn't match, how is that possible?")
 	}
 	if ref.INode != 1 {
-		return s.srv.INodes.GetINode(s.getContext(), ref)
+		// TODO: 3rd arg
+		return s.srv.INodes.GetINode(s.getContext(), ref, nil)
 	}
 	globals := s.mds.GlobalMetadata()
 	bs, err := blockset.CreateBlocksetFromSpec(globals.DefaultBlockSpec, nil)

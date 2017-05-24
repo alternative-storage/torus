@@ -571,7 +571,6 @@ var _ grpc.ClientConn
 const _ = grpc.SupportPackageIsVersion2
 
 // Client API for TorusStorage service
-
 type TorusStorageClient interface {
 	Block(ctx context.Context, in *BlockRequest, opts ...grpc.CallOption) (*BlockResponse, error)
 	PutBlock(ctx context.Context, in *PutBlockRequest, opts ...grpc.CallOption) (*PutResponse, error)

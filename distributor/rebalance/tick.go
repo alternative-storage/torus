@@ -73,7 +73,7 @@ func (r *rebalancer) Tick() (int, error) {
 		}
 		for i, ok := range oks {
 			if !ok {
-				data, err := r.bs.GetBlock(context.TODO(), v[i])
+				data, err := r.bs.GetBlock(context.TODO(), v[i], nil)
 				if err != nil {
 					clog.Warningf("couldn't get local block %s: %v", v[i], err)
 					continue

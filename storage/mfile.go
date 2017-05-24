@@ -12,6 +12,8 @@ import (
 
 	"github.com/coreos/pkg/capnslog"
 	"github.com/coreos/torus"
+	"github.com/opentracing/opentracing-go"
+	"github.com/opentracing/opentracing-go/log"
 )
 
 var _ torus.BlockStore = &mfileBlock{}
@@ -32,6 +34,8 @@ type mfileBlock struct {
 
 	itPool sync.Pool
 	// NB: Still room for improvement. Free lists, smart allocation, etc.
+
+	tracer opentracing.Tracer
 }
 
 var blankRefBytes = make([]byte, torus.BlockRefByteSize)
@@ -198,7 +202,19 @@ func (m *mfileBlock) HasBlock(_ context.Context, s torus.BlockRef) (bool, error)
 	return true, nil
 }
 
-func (m *mfileBlock) GetBlock(_ context.Context, s torus.BlockRef) ([]byte, error) {
+func (m *mfileBlock) GetBlock(ctx context.Context, s torus.BlockRef, tracer opentracing.Tracer) ([]byte, error) {
+	/// TODO tracer
+	if span := opentracing.SpanFromContext(ctx); span != nil && m.tracer != nil {
+		span := m.tracer.StartSpan("read block to the mfile", opentracing.ChildOf(span.Context()))
+		span.SetTag("write block to storage", "writinging")
+		span.LogFields(
+			log.String("uuid", "TODO"))
+		defer span.Finish()
+		ctx = opentracing.ContextWithSpan(ctx, span)
+	} else {
+		clog.Info("mfile ng")
+	}
+
 	m.mut.RLock()
 	defer m.mut.RUnlock()
 	if m.closed {
@@ -215,7 +231,24 @@ func (m *mfileBlock) GetBlock(_ context.Context, s torus.BlockRef) ([]byte, erro
 	return m.dataFile.GetBlock(uint64(index)), nil
 }
 
-func (m *mfileBlock) WriteBlock(_ context.Context, s torus.BlockRef, data []byte) error {
+// WriteBlock writes data to storage.
+func (m *mfileBlock) WriteBlock(ctx context.Context, s torus.BlockRef, data []byte, tracer opentracing.Tracer) error {
+	if tracer == nil {
+		clog.Info("mfile tracer nil")
+	}
+	m.tracer = tracer
+	/// TODO tracer
+	if span := opentracing.SpanFromContext(ctx); span != nil && m.tracer != nil {
+		span := m.tracer.StartSpan("write block to the mfile", opentracing.ChildOf(span.Context()))
+		span.SetTag("write block to storage", "writinging")
+		span.LogFields(
+			log.String("uuid", "TODO"))
+		defer span.Finish()
+		ctx = opentracing.ContextWithSpan(ctx, span)
+	} else {
+		clog.Info("mfile ng")
+	}
+
 	m.mut.Lock()
 	defer m.mut.Unlock()
 	if m.closed {
