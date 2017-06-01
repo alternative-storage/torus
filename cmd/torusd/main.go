@@ -18,9 +18,10 @@ import (
 	"github.com/coreos/torus/blockset"
 	"github.com/coreos/torus/distributor"
 	"github.com/coreos/torus/internal/flagconfig"
-	"github.com/coreos/torus/internal/http"
+	//      "github.com/coreos/torus/internal/http"
 	"github.com/coreos/torus/models"
 	"github.com/coreos/torus/ring"
+	"github.com/coreos/torus/tracing"
 
 	// Register all the possible drivers.
 	_ "github.com/coreos/torus/block"
@@ -77,6 +78,11 @@ func init() {
 }
 
 func main() {
+	hostname, _ := os.Hostname()
+	if err := jaeger.Init("torusd:" + hostname); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 	if err := rootCommand.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -219,9 +225,11 @@ func runServer(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return fmt.Errorf("couldn't use server: %s", err)
 	}
-	if httpAddress != "" {
-		http.ServeHTTP(httpAddress, srv)
-	}
+	/*
+		if httpAddress != "" {
+			http.ServeHTTP(httpAddress, srv)
+		}
+	*/
 	// Wait
 	<-mainClose
 	return nil

@@ -67,8 +67,7 @@ func (b *blockvolGC) PrepVolume(vol *models.Volume) error {
 	}
 
 	for _, x := range curINodes {
-		// TODO: check 3rd
-		inode, err := b.inodes.GetINode(b.getContext(), x, nil)
+		inode, err := b.inodes.GetINode(b.getContext(), x)
 		if err != nil {
 			return err
 		}
@@ -102,6 +101,9 @@ func (b *blockvolGC) IsDead(ref torus.BlockRef) bool {
 	}
 	// If it's a new block or INode, let it be.
 	if ref.INode >= v {
+		if clog.LevelAt(capnslog.TRACE) {
+			clog.Tracef("%s is new compared to %d", ref, v)
+		}
 		return false
 	}
 	// If it's an INode block, and it's not in our list

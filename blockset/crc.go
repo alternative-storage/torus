@@ -10,8 +10,6 @@ import (
 	"github.com/RoaringBitmap/roaring"
 	"github.com/coreos/pkg/capnslog"
 	"github.com/coreos/torus"
-
-	"github.com/opentracing/opentracing-go"
 )
 
 type crcBlockset struct {
@@ -50,14 +48,14 @@ func (b *crcBlockset) Kind() uint32 {
 	return uint32(CRC)
 }
 
-func (b *crcBlockset) GetBlock(ctx context.Context, i int, tracer opentracing.Tracer) ([]byte, error) {
+func (b *crcBlockset) GetBlock(ctx context.Context, i int) ([]byte, error) {
 	b.mut.RLock()
 	defer b.mut.RUnlock()
 	if i >= len(b.crcs) {
 		clog.Trace("crc: requesting block off the edge of known blocks")
 		return nil, torus.ErrBlockNotExist
 	}
-	data, err := b.sub.GetBlock(ctx, i, tracer)
+	data, err := b.sub.GetBlock(ctx, i)
 	if err != nil {
 		clog.Trace("crc: error requesting subblock")
 		return nil, err
@@ -72,12 +70,7 @@ func (b *crcBlockset) GetBlock(ctx context.Context, i int, tracer opentracing.Tr
 	return data, nil
 }
 
-/*
 func (b *crcBlockset) PutBlock(ctx context.Context, inode torus.INodeRef, i int, data []byte) error {
-	return PutBlock(ctx, inode, i, data, nil)
-}
-*/
-func (b *crcBlockset) PutBlock(ctx context.Context, inode torus.INodeRef, i int, data []byte, tracer opentracing.Tracer) error {
 	b.mut.Lock()
 	defer b.mut.Unlock()
 	if i > len(b.crcs) {
@@ -87,7 +80,7 @@ func (b *crcBlockset) PutBlock(ctx context.Context, inode torus.INodeRef, i int,
 	if crc == b.emptyCrc {
 		ctx = context.WithValue(ctx, "isEmpty", true)
 	}
-	err := b.sub.PutBlock(ctx, inode, i, data, tracer)
+	err := b.sub.PutBlock(ctx, inode, i, data)
 	if err != nil {
 		return err
 	}

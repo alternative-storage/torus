@@ -4,8 +4,6 @@ import (
 	"github.com/RoaringBitmap/roaring"
 	"github.com/coreos/torus/models"
 	"golang.org/x/net/context"
-
-	"github.com/opentracing/opentracing-go"
 )
 
 // Blockset is the interface representing the standardized methods to interact
@@ -16,10 +14,10 @@ type Blockset interface {
 	// Kind returns the kind of the Blockset.
 	Kind() uint32
 	// GetBlock returns the ith block in the Blockset.
-	GetBlock(ctx context.Context, i int, tracer opentracing.Tracer) ([]byte, error)
+	GetBlock(ctx context.Context, i int) ([]byte, error)
 	// PutBlock puts a block with data `b` into the Blockset as its ith block.
 	// The block belongs to the given inode.
-	PutBlock(ctx context.Context, inode INodeRef, i int, b []byte, tracer opentracing.Tracer) error
+	PutBlock(ctx context.Context, inode INodeRef, i int, b []byte) error
 	// GetLiveInodes returns the current INode representation of the Blockset.
 	// The returned INode might not be synced.
 	GetLiveINodes() *roaring.Bitmap

@@ -15,7 +15,7 @@ import:
   - capnslog
   - progressutil
 - package: github.com/dustin/go-humanize
-- package: github.com/gin-gonic/gin
+  #- package: github.com/gin-gonic/gin
 - package: github.com/godbus/dbus
 - package: github.com/gogo/protobuf
   subpackages:

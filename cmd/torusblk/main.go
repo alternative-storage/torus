@@ -10,7 +10,8 @@ import (
 	"github.com/coreos/torus"
 	"github.com/coreos/torus/distributor"
 	"github.com/coreos/torus/internal/flagconfig"
-	"github.com/coreos/torus/internal/http"
+	//	"github.com/coreos/torus/internal/http"
+	"github.com/coreos/torus/tracing"
 
 	// Register all the drivers.
 	_ "github.com/coreos/torus/metadata/etcd"
@@ -96,14 +97,22 @@ func createServer() *torus.Server {
 		fmt.Printf("couldn't start: %s", err)
 		os.Exit(1)
 	}
-	if httpAddr != "" {
-		go http.ServeHTTP(httpAddr, srv)
-	}
+	/*
+		if httpAddr != "" {
+			go http.ServeHTTP(httpAddr, srv)
+		}
+	*/
 	return srv
 }
 
 func main() {
 	capnslog.SetGlobalLogLevel(capnslog.WARNING)
+	hostname, _ := os.Hostname()
+
+	if err := jaeger.Init("torusblk:" + hostname); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
 
 	if err := rootCommand.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)

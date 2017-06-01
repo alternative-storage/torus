@@ -8,8 +8,6 @@ import (
 	"github.com/coreos/torus"
 	"github.com/coreos/torus/models"
 	"golang.org/x/net/context"
-
-	"github.com/opentracing/opentracing-go"
 )
 
 var clog = capnslog.NewPackageLogger("github.com/coreos/torus", "gc")
@@ -25,13 +23,13 @@ type GC interface {
 }
 
 type INodeFetcher interface {
-	GetINode(context.Context, torus.INodeRef, opentracing.Tracer) (*models.INode, error)
+	GetINode(context.Context, torus.INodeRef) (*models.INode, error)
 }
 
 func NewGCController(srv *torus.Server, inodes INodeFetcher) GC {
 	var gcs []GC
 	for k, v := range gcFuncs {
-		clog.Debugf("creating garvage corrector for %s", k)
+		clog.Debugf("creating %s gc", k)
 		gc, err := v(srv, inodes)
 		if err != nil {
 			clog.Errorf("cannot create gc %s: %v", k, err)

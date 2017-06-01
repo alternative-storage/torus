@@ -10,8 +10,6 @@ import (
 
 	"github.com/RoaringBitmap/roaring"
 	"github.com/coreos/torus"
-
-	"github.com/opentracing/opentracing-go"
 )
 
 type replicationBlockset struct {
@@ -56,18 +54,17 @@ func (b *replicationBlockset) Kind() uint32 {
 	return uint32(Replication)
 }
 
-func (b *replicationBlockset) GetBlock(ctx context.Context, i int, tracer opentracing.Tracer) ([]byte, error) {
+func (b *replicationBlockset) GetBlock(ctx context.Context, i int) ([]byte, error) {
 	if b.rep == 0 {
 		return nil, torus.ErrBlockUnavailable
 	}
 	newctx := context.WithValue(ctx, "replication", b.rep)
-	bytes, err := b.sub.GetBlock(newctx, i, tracer)
+	bytes, err := b.sub.GetBlock(newctx, i)
 	if err == nil || err == torus.ErrBlockNotExist {
 		return bytes, err
 	}
 	for rep := 0; rep < (b.rep - 1); rep++ {
-		//TODO
-		bytes, err := b.bs.GetBlock(ctx, b.repBlocks[rep][i], nil)
+		bytes, err := b.bs.GetBlock(ctx, b.repBlocks[rep][i])
 		if err == nil {
 			return bytes, nil
 		}
@@ -75,18 +72,17 @@ func (b *replicationBlockset) GetBlock(ctx context.Context, i int, tracer opentr
 	return nil, torus.ErrBlockUnavailable
 }
 
-func (b *replicationBlockset) PutBlock(ctx context.Context, inode torus.INodeRef, i int, data []byte, tracer opentracing.Tracer) error {
+func (b *replicationBlockset) PutBlock(ctx context.Context, inode torus.INodeRef, i int, data []byte) error {
 	if b.rep == 0 {
 		return torus.ErrBlockUnavailable
 	}
-	err := b.sub.PutBlock(ctx, inode, i, data, tracer)
+	err := b.sub.PutBlock(ctx, inode, i, data)
 	if err != nil {
 		return err
 	}
 	for rep := 0; rep < (b.rep - 1); rep++ {
 		newBlockID := b.makeID(inode)
-		// TODO
-		err := b.bs.WriteBlock(ctx, newBlockID, data, nil)
+		err := b.bs.WriteBlock(ctx, newBlockID, data)
 		if err != nil {
 			return err
 		}

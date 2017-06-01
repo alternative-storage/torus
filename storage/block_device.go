@@ -10,9 +10,6 @@ import (
 
 	"github.com/coreos/torus"
 
-	"github.com/opentracing/opentracing-go"
-	"github.com/opentracing/opentracing-go/log"
-
 	blockDevice "github.com/coreos/torus/storage/block_device"
 )
 
@@ -134,19 +131,7 @@ func (d *deviceBlock) HasBlock(ctx context.Context, b torus.BlockRef) (bool, err
 	return found, err
 }
 
-func (d *deviceBlock) GetBlock(ctx context.Context, b torus.BlockRef, tr opentracing.Tracer) ([]byte, error) {
-	// TODO not called?
-	if span := opentracing.SpanFromContext(ctx); span != nil {
-		span := tr.StartSpan("write block for test", opentracing.ChildOf(span.Context()))
-		span.SetTag("write block to test", "writinging")
-		span.LogFields(
-			log.String("uuid", "TODO"))
-		defer span.Finish()
-		ctx = opentracing.ContextWithSpan(ctx, span)
-	} else {
-		clog.Info("mfile ng")
-	}
-
+func (d *deviceBlock) GetBlock(ctx context.Context, b torus.BlockRef) ([]byte, error) {
 	offset, found, err := d.findBlockOffset(b)
 	if err != nil {
 		return nil, err
@@ -169,19 +154,7 @@ func (d *deviceBlock) GetBlock(ctx context.Context, b torus.BlockRef, tr opentra
 	return buf, nil
 }
 
-func (d *deviceBlock) WriteBlock(ctx context.Context, b torus.BlockRef, data []byte, tr opentracing.Tracer) error {
-	// TODO not called?
-	if span := opentracing.SpanFromContext(ctx); span != nil {
-		span := tr.StartSpan("write block for test", opentracing.ChildOf(span.Context()))
-		span.SetTag("write block to test", "writinging")
-		span.LogFields(
-			log.String("uuid", "TODO"))
-		defer span.Finish()
-		ctx = opentracing.ContextWithSpan(ctx, span)
-	} else {
-		clog.Info("mfile ng")
-	}
-
+func (d *deviceBlock) WriteBlock(ctx context.Context, b torus.BlockRef, data []byte) error {
 	if uint64(len(data)) != d.metadata.TorusBlockSize {
 		return fmt.Errorf("data buffer does not match block size")
 	}

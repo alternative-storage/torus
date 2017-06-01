@@ -3,7 +3,7 @@ package grpc
 import (
 	"net"
 	"net/url"
-	"runtime/debug"
+	//	"runtime/debug"
 	"strings"
 	"time"
 
@@ -11,12 +11,15 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/coreos/torus/jaeger"
-	"github.com/opentracing/opentracing-go"
+	//"github.com/coreos/torus/jaeger"
+	//"github.com/opentracing/opentracing-go"
 
 	"github.com/coreos/torus"
 	"github.com/coreos/torus/distributor/protocols"
 	"github.com/coreos/torus/models"
+
+	//"github.com/grpc-ecosystem/go-grpc-middleware"
+	"github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
 )
 
 const defaultPort = "40000"
@@ -38,7 +41,11 @@ func grpcRPCListener(url *url.URL, hdl protocols.RPC, gmd torus.GlobalMetadata) 
 	if err != nil {
 		return nil, err
 	}
-	out.grpc = grpc.NewServer()
+
+	uIntOpt := grpc.UnaryInterceptor(grpc_opentracing.UnaryServerInterceptor())
+	//sIntOpt := grpc_opentracing.StreamServerInterceptor()
+	out.grpc = grpc.NewServer(uIntOpt)
+
 	models.RegisterTorusStorageServer(out.grpc, out)
 	go out.grpc.Serve(lis)
 	return out, nil
@@ -49,7 +56,8 @@ func grpcRPCDialer(url *url.URL, timeout time.Duration, gmd torus.GlobalMetadata
 	if !strings.Contains(h, ":") {
 		h = net.JoinHostPort(h, defaultPort)
 	}
-	conn, err := grpc.Dial(h, grpc.WithInsecure(), grpc.WithTimeout(timeout))
+	uIntOpt := grpc.WithUnaryInterceptor(grpc_opentracing.UnaryClientInterceptor())
+	conn, err := grpc.Dial(h, grpc.WithInsecure(), grpc.WithTimeout(timeout), uIntOpt)
 	if err != nil {
 		return nil, err
 	}
@@ -68,19 +76,8 @@ func (c *client) Close() error {
 	return c.conn.Close()
 }
 
+// client (torusblk) calls this PutBlock.
 func (c *client) PutBlock(ctx context.Context, ref torus.BlockRef, data []byte) error {
-	//debug.PrintStack()
-	tracer := jaeger.Init("torusd Distributor Server")
-	if span := opentracing.SpanFromContext(ctx); span != nil {
-		span := tracer.StartSpan("server side", opentracing.ChildOf(span.Context()))
-		span.SetTag("second", "abc")
-		ctx = opentracing.ContextWithSpan(ctx, span)
-		defer span.Finish()
-	} else {
-		//clog.Infof("ng-110")
-		debug.PrintStack()
-	}
-	// TODO not necessary(?)
 	_, err := c.handler.PutBlock(ctx, &models.PutBlockRequest{
 		Refs: []*models.BlockRef{
 			ref.ToProto(),
@@ -134,8 +131,8 @@ func (h *handler) Block(ctx context.Context, req *models.BlockRequest) (*models.
 	}, nil
 }
 
+// This PutBlock is called by server(torusd) side.
 func (h *handler) PutBlock(ctx context.Context, req *models.PutBlockRequest) (*models.PutResponse, error) {
-	//debug.PrintStack()
 	for i, ref := range req.Refs {
 		err := h.handle.PutBlock(ctx, torus.BlockFromProto(ref), req.Blocks[i])
 		if err != nil {

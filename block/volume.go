@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/coreos/pkg/progressutil"
+
 	"github.com/coreos/torus"
 	"github.com/coreos/torus/blockset"
 	"github.com/coreos/torus/models"
@@ -129,8 +130,7 @@ func (s *BlockVolume) getOrCreateBlockINode(ref torus.INodeRef) (*models.INode, 
 		panic("ids managed by metadata didn't match, how is that possible?")
 	}
 	if ref.INode != 1 {
-		// TODO: 3rd arg
-		return s.srv.INodes.GetINode(s.getContext(), ref, nil)
+		return s.srv.INodes.GetINode(s.getContext(), ref)
 	}
 	globals := s.mds.GlobalMetadata()
 	bs, err := blockset.CreateBlocksetFromSpec(globals.DefaultBlockSpec, nil)

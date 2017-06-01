@@ -1,28 +1,25 @@
 package distributor
 
 import (
-	//	"runtime/debug"
+	"github.com/coreos/torus"
 
 	"github.com/coreos/pkg/capnslog"
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/jaeger"
 	"github.com/opentracing/opentracing-go"
-	//	"github.com/opentracing/opentracing-go/log"
 	"golang.org/x/net/context"
 )
 
 func (d *Distributor) Block(ctx context.Context, ref torus.BlockRef) ([]byte, error) {
-	promDistBlockRPCs.Inc()
-	tracer := jaeger.Init("torusd Distributor Server")
+	tracer := opentracing.GlobalTracer()
 	if span := opentracing.SpanFromContext(ctx); span != nil {
-		span := tracer.StartSpan("server side", opentracing.ChildOf(span.Context()))
-		span.SetTag("second", "abc")
+		span := tracer.StartSpan("Block", opentracing.ChildOf(span.Context()))
+		span.SetTag("INode", ref.INodeRef.String())
 		ctx = opentracing.ContextWithSpan(ctx, span)
 		defer span.Finish()
 	} else {
-		clog.Infof("ng-11aa")
+		clog.Warningf("failed to create span for Block")
 	}
-	data, err := d.blocks.GetBlock(ctx, ref, tracer)
+	promDistBlockRPCs.Inc()
+	data, err := d.blocks.GetBlock(ctx, ref)
 	if err != nil {
 		promDistBlockRPCFailures.Inc()
 		clog.Warningf("remote asking for non-existent block: %s", ref)
@@ -36,19 +33,15 @@ func (d *Distributor) Block(ctx context.Context, ref torus.BlockRef) ([]byte, er
 
 // PutBlock server side implementaion which is called from RPC client.
 func (d *Distributor) PutBlock(ctx context.Context, ref torus.BlockRef, data []byte) error {
-	//debug.PrintStack()
-	// wrong!
-	tracer := jaeger.Init("torusd Distributor Server")
+	tracer := opentracing.GlobalTracer()
 	if span := opentracing.SpanFromContext(ctx); span != nil {
-		span := tracer.StartSpan("server side", opentracing.ChildOf(span.Context()))
-		span.SetTag("second", "abc")
+		span := tracer.StartSpan("PutBlock", opentracing.ChildOf(span.Context()))
+		span.SetTag("INode", ref.INodeRef.String())
 		ctx = opentracing.ContextWithSpan(ctx, span)
 		defer span.Finish()
 	} else {
-		clog.Infof("ng-111")
+		clog.Warningf("failed to create span for PutBlock")
 	}
-	// TODO not necessary(?)
-	d.ctx = ctx
 	d.mut.RLock()
 	defer d.mut.RUnlock()
 	promDistPutBlockRPCs.Inc()
@@ -71,7 +64,7 @@ func (d *Distributor) PutBlock(ctx context.Context, ref torus.BlockRef, data []b
 	}
 
 	// WriteBlock to my storage file.
-	err = d.blocks.WriteBlock(d.ctx, ref, data, tracer)
+	err = d.blocks.WriteBlock(ctx, ref, data)
 	if err != nil {
 		return err
 	}
@@ -82,6 +75,15 @@ func (d *Distributor) PutBlock(ctx context.Context, ref torus.BlockRef, data []b
 }
 
 func (d *Distributor) RebalanceCheck(ctx context.Context, refs []torus.BlockRef) ([]bool, error) {
+	tracer := opentracing.GlobalTracer()
+	if span := opentracing.SpanFromContext(ctx); span != nil {
+		span := tracer.StartSpan("server side write", opentracing.ChildOf(span.Context()))
+		// TODO set tag
+		ctx = opentracing.ContextWithSpan(ctx, span)
+		defer span.Finish()
+	} else {
+		clog.Warningf("failed to create span for RebalanceCheck")
+	}
 	out := make([]bool, len(refs))
 	for i, x := range refs {
 		ok, err := d.blocks.HasBlock(ctx, x)

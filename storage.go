@@ -10,7 +10,6 @@ import (
 	"github.com/coreos/pkg/capnslog"
 	"github.com/coreos/torus/models"
 	"github.com/lpabon/godbc"
-	"github.com/opentracing/opentracing-go"
 )
 
 var BlockLog = capnslog.NewPackageLogger("github.com/coreos/torus", "blocklog")
@@ -250,8 +249,8 @@ func ParseReadLevel(s string) (rl ReadLevel, err error) {
 type BlockStore interface {
 	Store
 	HasBlock(ctx context.Context, b BlockRef) (bool, error)
-	GetBlock(ctx context.Context, b BlockRef, tr opentracing.Tracer) ([]byte, error)
-	WriteBlock(ctx context.Context, b BlockRef, data []byte, tr opentracing.Tracer) error
+	GetBlock(ctx context.Context, b BlockRef) ([]byte, error)
+	WriteBlock(ctx context.Context, b BlockRef, data []byte) error
 	WriteBuf(ctx context.Context, b BlockRef) ([]byte, error)
 	DeleteBlock(ctx context.Context, b BlockRef) error
 	NumBlocks() uint64

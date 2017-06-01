@@ -2,14 +2,14 @@ package distributor
 
 import (
 	"net/url"
-	"runtime/debug"
+	//"runtime/debug"
 	"sync"
 	"time"
 
 	"github.com/coreos/torus"
 	"github.com/coreos/torus/distributor/protocols"
 	"github.com/opentracing/opentracing-go"
-	"github.com/opentracing/opentracing-go/log"
+	//"github.com/opentracing/opentracing-go/log"
 
 	"golang.org/x/net/context"
 )
@@ -142,18 +142,6 @@ func (d *distClient) GetBlock(ctx context.Context, uuid string, b torus.BlockRef
 
 // PutBlock starts RPC call to put data.
 func (d *distClient) PutBlock(ctx context.Context, uuid string, b torus.BlockRef, data []byte) error {
-	if span := opentracing.SpanFromContext(ctx); span != nil {
-		span := d.tracer.StartSpan("PutBlock on RPC client", opentracing.ChildOf(span.Context()))
-		span.SetTag("write", "put start")
-		span.LogFields(
-			log.String("write", "writing..."),
-			log.String("uuid", "TODO"))
-		defer span.Finish()
-		ctx = opentracing.ContextWithSpan(ctx, span)
-	} else {
-		//		debug.PrintStack()
-		clog.Info("ng-12")
-	}
 	conn := d.getConn(uuid)
 	if conn == nil {
 		return torus.ErrNoPeer

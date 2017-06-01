@@ -2,13 +2,12 @@ package distributor
 
 import (
 	"errors"
-	"runtime/debug"
 	"sync"
 	"time"
 
 	"github.com/coreos/torus"
+
 	"github.com/opentracing/opentracing-go"
-	"github.com/opentracing/opentracing-go/log"
 	"golang.org/x/net/context"
 )
 
@@ -16,20 +15,12 @@ var (
 	ErrNoPeersBlock = errors.New("distributor: no peers available for a block")
 )
 
-func (d *Distributor) GetBlock(ctx context.Context, i torus.BlockRef, tracer opentracing.Tracer) ([]byte, error) {
-	if span := opentracing.SpanFromContext(ctx); span != nil {
-		span := tracer.StartSpan("reading to peers including me", opentracing.ChildOf(span.Context()))
-		span.SetTag("write", "read start")
-		span.LogFields(
-			log.String("write", "writing..."),
-			log.String("uuid", "TODO"))
-		defer span.Finish()
-		ctx = opentracing.ContextWithSpan(ctx, span)
-	} else {
-		// nil is OK if prepvolume or something client commands
-		//		debug.PrintStack()
-		//		clog.Info("ng-12")
-	}
+func (d *Distributor) GetBlock(ctx context.Context, i torus.BlockRef) ([]byte, error) {
+	span := opentracing.GlobalTracer().StartSpan("Read Block")
+	span.SetTag("INode", i.INodeRef.String())
+	ctx = opentracing.ContextWithSpan(ctx, span)
+	defer span.Finish()
+
 	d.mut.RLock()
 	defer d.mut.RUnlock()
 	promDistBlockRequests.Inc()
@@ -50,7 +41,7 @@ func (d *Distributor) GetBlock(ctx context.Context, i torus.BlockRef, tracer ope
 	writeLevel := d.getWriteFromServer()
 	for _, p := range peers.Peers[:peers.Replication] {
 		if p == d.UUID() || writeLevel == torus.WriteLocal {
-			b, err := d.blocks.GetBlock(ctx, i, tracer)
+			b, err := d.blocks.GetBlock(ctx, i)
 			if err == nil {
 				promDistBlockLocalHits.Inc()
 				return b, nil
@@ -63,11 +54,11 @@ func (d *Distributor) GetBlock(ctx context.Context, i torus.BlockRef, tracer ope
 	readLevel := d.getReadFromServer()
 	switch readLevel {
 	case torus.ReadBlock:
-		blk, err = d.readWithBackoff(ctx, i, peers, tracer)
+		blk, err = d.readWithBackoff(ctx, i, peers)
 	case torus.ReadSequential:
-		blk, err = d.readSequential(ctx, i, peers, clientTimeout, tracer)
+		blk, err = d.readSequential(ctx, i, peers, clientTimeout)
 	case torus.ReadSpread:
-		blk, err = d.readSpread(ctx, i, peers, tracer)
+		blk, err = d.readSpread(ctx, i, peers)
 	default:
 		panic("unhandled read level")
 	}
@@ -79,10 +70,10 @@ func (d *Distributor) GetBlock(ctx context.Context, i torus.BlockRef, tracer ope
 	return blk, err
 }
 
-func (d *Distributor) readWithBackoff(ctx context.Context, ref torus.BlockRef, peers torus.PeerPermutation, tracer opentracing.Tracer) ([]byte, error) {
+func (d *Distributor) readWithBackoff(ctx context.Context, ref torus.BlockRef, peers torus.PeerPermutation) ([]byte, error) {
 	for i := uint(0); i < 10; i++ {
 		timeout := clientTimeout * (1 << i)
-		blk, err := d.readSequential(ctx, ref, peers, timeout, tracer)
+		blk, err := d.readSequential(ctx, ref, peers, timeout)
 		if err == nil {
 			return blk, err
 		}
@@ -91,11 +82,11 @@ func (d *Distributor) readWithBackoff(ctx context.Context, ref torus.BlockRef, p
 	return nil, ErrNoPeersBlock
 }
 
-func (d *Distributor) readSequential(ctx context.Context, i torus.BlockRef, peers torus.PeerPermutation, timeout time.Duration, tracer opentracing.Tracer) ([]byte, error) {
+func (d *Distributor) readSequential(ctx context.Context, i torus.BlockRef, peers torus.PeerPermutation, timeout time.Duration) ([]byte, error) {
 	for _, p := range peers.Peers {
 		// If it's local, just try to get it.
 		if p == d.UUID() {
-			b, err := d.blocks.GetBlock(ctx, i, tracer)
+			b, err := d.blocks.GetBlock(ctx, i)
 			if err == nil {
 				promDistBlockLocalHits.Inc()
 				return b, nil
@@ -129,7 +120,7 @@ func (d *Distributor) readSequential(ctx context.Context, i torus.BlockRef, peer
 	return nil, ErrNoPeersBlock
 }
 
-func (d *Distributor) readSpread(ctx context.Context, i torus.BlockRef, peers torus.PeerPermutation, tracer opentracing.Tracer) ([]byte, error) {
+func (d *Distributor) readSpread(ctx context.Context, i torus.BlockRef, peers torus.PeerPermutation) ([]byte, error) {
 	resch := make(chan []byte)
 	errch := make(chan error, peers.Replication)
 	var once sync.Once
@@ -187,21 +178,12 @@ func (d *Distributor) getReadFromServer() torus.ReadLevel {
 	return d.srv.Cfg.ReadLevel
 }
 
-func (d *Distributor) WriteBlock(ctx context.Context, i torus.BlockRef, data []byte, tr opentracing.Tracer) error {
-	// TODO: implement all of d.tracer
-	if span := opentracing.SpanFromContext(ctx); span != nil {
-		span := tr.StartSpan("writing to peers including me", opentracing.ChildOf(span.Context()))
-		span.SetTag("write", "put start")
-		span.LogFields(
-			log.String("write", "writing..."),
-			log.String("uuid", "TODO"))
-		defer span.Finish()
-		ctx = opentracing.ContextWithSpan(ctx, span)
-	} else {
-		//		debug.PrintStack()
-		clog.Info("ng-12")
-	}
-	d.client.tracer = tr
+func (d *Distributor) WriteBlock(ctx context.Context, i torus.BlockRef, data []byte) error {
+	span := opentracing.GlobalTracer().StartSpan("Write Block")
+	span.SetTag("INode", i.INodeRef.String())
+	ctx = opentracing.ContextWithSpan(ctx, span)
+	defer span.Finish()
+
 	d.mut.RLock()
 	defer d.mut.RUnlock()
 	peers, err := d.ring.GetPeers(i)
@@ -214,17 +196,17 @@ func (d *Distributor) WriteBlock(ctx context.Context, i torus.BlockRef, data []b
 	d.readCache.Put(string(i.ToBytes()), data)
 	switch d.getWriteFromServer() {
 	case torus.WriteLocal:
-		err = d.blocks.WriteBlock(ctx, i, data, nil)
+		err = d.blocks.WriteBlock(ctx, i, data)
 		if err == nil {
 			return nil
 		}
-		clog.Debugf("couldn't write locally; writing to cluster: %s", err)
+		clog.Debugf("Couldn't write locally; writing to cluster: %s", err)
 		fallthrough
 	case torus.WriteOne:
 		for _, p := range peers.Peers[:peers.Replication] {
 			// If we're one of the desired peers, we count, write here first.
 			if p == d.UUID() {
-				err = d.blocks.WriteBlock(ctx, i, data, nil)
+				err = d.blocks.WriteBlock(ctx, i, data)
 				if err != nil {
 					clog.Noticef("WriteOne error, local: %s", err)
 				} else {
@@ -245,7 +227,7 @@ func (d *Distributor) WriteBlock(ctx context.Context, i torus.BlockRef, data []b
 		for _, p := range peers.Peers {
 			var err error
 			if p == d.UUID() {
-				err = d.blocks.WriteBlock(ctx, i, data, nil)
+				err = d.blocks.WriteBlock(ctx, i, data)
 			} else {
 				err = d.client.PutBlock(ctx, p, i, data)
 			}
