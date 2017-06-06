@@ -15,7 +15,7 @@ Sharding is done via a consistent hash function, controlled in the simple case b
 
 ## Project Status
 
-unknown
+TODO
 
 ## Trying out Torus
 
