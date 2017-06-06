@@ -11,7 +11,7 @@ import (
 func (d *Distributor) Block(ctx context.Context, ref torus.BlockRef) ([]byte, error) {
 	tracer := opentracing.GlobalTracer()
 	if span := opentracing.SpanFromContext(ctx); span != nil {
-		span := tracer.StartSpan("Block", opentracing.ChildOf(span.Context()))
+		span := tracer.StartSpan("Reading from storage", opentracing.ChildOf(span.Context()))
 		span.SetTag("INode", ref.INodeRef.String())
 		ctx = opentracing.ContextWithSpan(ctx, span)
 		defer span.Finish()
@@ -35,7 +35,7 @@ func (d *Distributor) Block(ctx context.Context, ref torus.BlockRef) ([]byte, er
 func (d *Distributor) PutBlock(ctx context.Context, ref torus.BlockRef, data []byte) error {
 	tracer := opentracing.GlobalTracer()
 	if span := opentracing.SpanFromContext(ctx); span != nil {
-		span := tracer.StartSpan("PutBlock", opentracing.ChildOf(span.Context()))
+		span := tracer.StartSpan("Writing to storage", opentracing.ChildOf(span.Context()))
 		span.SetTag("INode", ref.INodeRef.String())
 		ctx = opentracing.ContextWithSpan(ctx, span)
 		defer span.Finish()
@@ -77,7 +77,7 @@ func (d *Distributor) PutBlock(ctx context.Context, ref torus.BlockRef, data []b
 func (d *Distributor) RebalanceCheck(ctx context.Context, refs []torus.BlockRef) ([]bool, error) {
 	tracer := opentracing.GlobalTracer()
 	if span := opentracing.SpanFromContext(ctx); span != nil {
-		span := tracer.StartSpan("server side write", opentracing.ChildOf(span.Context()))
+		span := tracer.StartSpan("Checking rebalnce", opentracing.ChildOf(span.Context()))
 		// TODO set tag
 		ctx = opentracing.ContextWithSpan(ctx, span)
 		defer span.Finish()

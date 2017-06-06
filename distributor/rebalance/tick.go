@@ -8,6 +8,7 @@ import (
 
 	"github.com/coreos/pkg/capnslog"
 	"github.com/coreos/torus"
+	"github.com/opentracing/opentracing-go"
 )
 
 const maxIters = 50
@@ -15,6 +16,9 @@ const maxIters = 50
 var rebalanceTimeout = 5 * time.Second
 
 func (r *rebalancer) Tick() (int, error) {
+	span := opentracing.GlobalTracer().StartSpan("Rebalance check")
+	defer span.Finish()
+
 	if r.it == nil {
 		r.it = r.bs.BlockIterator()
 		r.ring = r.r.Ring()
@@ -60,6 +64,7 @@ func (r *rebalancer) Tick() (int, error) {
 	n := 0
 	for k, v := range m {
 		ctx, cancel := context.WithTimeout(context.TODO(), rebalanceTimeout)
+		ctx = opentracing.ContextWithSpan(ctx, span)
 		oks, err := r.cs.Check(ctx, k, v)
 		cancel()
 		if err != nil {
@@ -80,6 +85,7 @@ func (r *rebalancer) Tick() (int, error) {
 				}
 				n++
 				ctx, cancel := context.WithTimeout(context.TODO(), rebalanceTimeout)
+				ctx = opentracing.ContextWithSpan(ctx, span)
 				if torus.BlockLog.LevelAt(capnslog.TRACE) {
 					torus.BlockLog.Tracef("rebalance: sending block %s to %s", v[i], k)
 				}
