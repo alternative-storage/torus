@@ -1,5 +1,5 @@
 hash: edb1bf180960a95b2d18192b961588f6c12eb7e8874975d2788e92d2a85b66bd
-updated: 2017-06-04T16:15:26.191462035+09:00
+updated: 2017-06-07T17:40:12.75362106+09:00
 imports:
 - name: github.com/apache/thrift
   version: 53dd39833a08ce33582e5ff31fa18bb4735d6731
@@ -154,7 +154,7 @@ imports:
   subpackages:
   - ssh/terminal
 - name: golang.org/x/net
-  version: e4fa1c5465ad6111f206fc92186b8c83d64adbe1
+  version: 59a0b19b5533c7977ddeb86b017bf507ed407b12
   repo: https://go.googlesource.com/net
   subpackages:
   - bpf

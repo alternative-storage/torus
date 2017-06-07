@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 	"os"
 	"os/signal"
@@ -28,6 +29,8 @@ import (
 	_ "github.com/coreos/torus/metadata/etcd"
 	_ "github.com/coreos/torus/metadata/temp"
 	_ "github.com/coreos/torus/storage"
+
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 var (
@@ -225,11 +228,10 @@ func runServer(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return fmt.Errorf("couldn't use server: %s", err)
 	}
-	/*
-		if httpAddress != "" {
-			http.ServeHTTP(httpAddress, srv)
-		}
-	*/
+	if httpAddress != "" {
+		http.Handle("/metrics", prometheus.Handler())
+		http.ListenAndServe(httpAddress, nil)
+	}
 	// Wait
 	<-mainClose
 	return nil
