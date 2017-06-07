@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"github.com/coreos/torus"
+	"github.com/alternative-storage/torus"
 )
 
 type BlockHeader struct {

@@ -7,10 +7,10 @@ import (
 	"math/rand"
 	"os"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/metadata"
-	"github.com/coreos/torus/models"
-	"github.com/coreos/torus/ring"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/metadata"
+	"github.com/alternative-storage/torus/models"
+	"github.com/alternative-storage/torus/ring"
 	"github.com/dustin/go-humanize"
 )
 

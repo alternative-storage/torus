@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/coreos/torus"
+	"github.com/alternative-storage/torus"
 	"golang.org/x/net/context"
 )
 

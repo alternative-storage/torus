@@ -12,14 +12,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/block"
-	"github.com/coreos/torus/distributor"
-	"github.com/coreos/torus/metadata/temp"
-	"github.com/coreos/torus/models"
-	"github.com/coreos/torus/ring"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/block"
+	"github.com/alternative-storage/torus/distributor"
+	"github.com/alternative-storage/torus/metadata/temp"
+	"github.com/alternative-storage/torus/models"
+	"github.com/alternative-storage/torus/ring"
 
-	_ "github.com/coreos/torus/storage"
+	_ "github.com/alternative-storage/torus/storage"
 )
 
 const (

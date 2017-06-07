@@ -1,7 +1,7 @@
 package distributor
 
 import (
-	"github.com/coreos/torus"
+	"github.com/alternative-storage/torus"
 
 	"github.com/coreos/pkg/capnslog"
 	"github.com/opentracing/opentracing-go"

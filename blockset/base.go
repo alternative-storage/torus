@@ -7,7 +7,7 @@ import (
 
 	"github.com/RoaringBitmap/roaring"
 	"github.com/coreos/pkg/capnslog"
-	"github.com/coreos/torus"
+	"github.com/alternative-storage/torus"
 )
 
 type baseBlockset struct {

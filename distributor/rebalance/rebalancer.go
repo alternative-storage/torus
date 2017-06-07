@@ -5,13 +5,13 @@ package rebalance
 
 import (
 	"github.com/coreos/pkg/capnslog"
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/gc"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/gc"
+	"github.com/alternative-storage/torus/models"
 	"golang.org/x/net/context"
 )
 
-var clog = capnslog.NewPackageLogger("github.com/coreos/torus", "rebalance")
+var clog = capnslog.NewPackageLogger("github.com/alternative-storage/torus", "rebalance")
 
 type Ringer interface {
 	Ring() torus.Ring

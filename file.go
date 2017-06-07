@@ -12,7 +12,7 @@ import (
 	"github.com/coreos/pkg/capnslog"
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus/models"
 )
 
 var (

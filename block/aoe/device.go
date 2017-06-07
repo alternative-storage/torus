@@ -5,7 +5,7 @@ import (
 	"errors"
 	"io"
 
-	"github.com/coreos/torus/block"
+	"github.com/alternative-storage/torus/block"
 
 	"github.com/mdlayher/aoe"
 )

@@ -5,10 +5,10 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/internal/flagconfig"
-	"github.com/coreos/torus/models"
-	"github.com/coreos/torus/ring"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/internal/flagconfig"
+	"github.com/alternative-storage/torus/models"
+	"github.com/alternative-storage/torus/ring"
 	"github.com/spf13/cobra"
 )
 

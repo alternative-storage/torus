@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/metadata/temp"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/metadata/temp"
 
-	_ "github.com/coreos/torus/storage"
+	_ "github.com/alternative-storage/torus/storage"
 )
 
 func newServer(md *temp.Server) *torus.Server {

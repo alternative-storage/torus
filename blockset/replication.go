@@ -9,7 +9,7 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/RoaringBitmap/roaring"
-	"github.com/coreos/torus"
+	"github.com/alternative-storage/torus"
 )
 
 type replicationBlockset struct {

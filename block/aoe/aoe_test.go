@@ -13,11 +13,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/block"
-	"github.com/coreos/torus/metadata/temp"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/block"
+	"github.com/alternative-storage/torus/metadata/temp"
 	// Imported so that storage registers properly
-	_ "github.com/coreos/torus/storage"
+	_ "github.com/alternative-storage/torus/storage"
 
 	"github.com/mdlayher/aoe"
 	"github.com/mdlayher/ethernet"

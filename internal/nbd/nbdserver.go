@@ -11,7 +11,7 @@ import (
 	"github.com/coreos/pkg/capnslog"
 )
 
-var clog = capnslog.NewPackageLogger("github.com/coreos/torus", "nbd")
+var clog = capnslog.NewPackageLogger("github.com/alternative-storage/torus", "nbd")
 
 const (
 	nbdMagic uint64 = 0x4e42444d41474943

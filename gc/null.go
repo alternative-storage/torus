@@ -1,8 +1,8 @@
 package gc
 
 import (
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/models"
 )
 
 type NullGC struct{}

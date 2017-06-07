@@ -8,14 +8,14 @@ import (
 	"sync"
 
 	"github.com/coreos/pkg/capnslog"
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/distributor/protocols"
-	"github.com/coreos/torus/distributor/rebalance"
-	"github.com/coreos/torus/gc"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/distributor/protocols"
+	"github.com/alternative-storage/torus/distributor/rebalance"
+	"github.com/alternative-storage/torus/gc"
 )
 
 var (
-	clog = capnslog.NewPackageLogger("github.com/coreos/torus", "distributor")
+	clog = capnslog.NewPackageLogger("github.com/alternative-storage/torus", "distributor")
 )
 
 type Distributor struct {

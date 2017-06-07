@@ -3,7 +3,7 @@ package torus
 import (
 	"math/big"
 
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus/models"
 )
 
 type RingType int

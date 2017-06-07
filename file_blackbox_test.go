@@ -7,12 +7,12 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/blockset"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/blockset"
+	"github.com/alternative-storage/torus/models"
 
-	_ "github.com/coreos/torus/metadata/temp"
-	_ "github.com/coreos/torus/storage"
+	_ "github.com/alternative-storage/torus/metadata/temp"
+	_ "github.com/alternative-storage/torus/storage"
 )
 
 func makeTestData(size int) []byte {

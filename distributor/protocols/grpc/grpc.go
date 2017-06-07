@@ -11,12 +11,12 @@ import (
 
 	"golang.org/x/net/context"
 
-	//"github.com/coreos/torus/jaeger"
+	//"github.com/alternative-storage/torus/jaeger"
 	//"github.com/opentracing/opentracing-go"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/distributor/protocols"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/distributor/protocols"
+	"github.com/alternative-storage/torus/models"
 
 	//"github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"

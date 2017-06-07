@@ -30,7 +30,7 @@ And you're done.
 
 ### 4) Connect, look around
 
-Grab the [latest release](https://github.com/coreos/torus/releases) and use the included `torusctl` tool. Or just build it from source.
+Grab the [latest release](https://github.com/alternative-storage/torus/releases) and use the included `torusctl` tool. Or just build it from source.
 
 ```
 torusctl -C $IP_IN_CLUSTER:32379 list-peers

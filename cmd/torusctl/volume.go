@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/block"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/block"
 	"github.com/dustin/go-humanize"
 	"github.com/spf13/cobra"
 )

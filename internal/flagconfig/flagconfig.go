@@ -13,8 +13,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/coreos/torus"
-	cli "github.com/coreos/torus/cliconfig"
+	"github.com/alternative-storage/torus"
+	cli "github.com/alternative-storage/torus/cliconfig"
 	"github.com/dustin/go-humanize"
 	flag "github.com/spf13/pflag"
 )

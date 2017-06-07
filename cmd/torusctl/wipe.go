@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/internal/flagconfig"
-	_ "github.com/coreos/torus/metadata/etcd"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/internal/flagconfig"
+	_ "github.com/alternative-storage/torus/metadata/etcd"
 )
 
 var (

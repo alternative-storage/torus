@@ -8,7 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/coreos/torus/cmd/mkfs.torus/lib"
+	"github.com/alternative-storage/torus/cmd/mkfs.torus/lib"
 )
 
 var (

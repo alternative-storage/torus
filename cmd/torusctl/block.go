@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/internal/flagconfig"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/internal/flagconfig"
 	"github.com/spf13/cobra"
 )
 

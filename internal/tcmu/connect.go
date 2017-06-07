@@ -6,7 +6,7 @@ import (
 	"github.com/coreos/go-tcmu"
 	"github.com/coreos/go-tcmu/scsi"
 	"github.com/coreos/pkg/capnslog"
-	"github.com/coreos/torus/block"
+	"github.com/alternative-storage/torus/block"
 )
 
 const (
@@ -14,7 +14,7 @@ const (
 	devPath          = "/dev/torus"
 )
 
-var clog = capnslog.NewPackageLogger("github.com/coreos/torus", "tcmu")
+var clog = capnslog.NewPackageLogger("github.com/alternative-storage/torus", "tcmu")
 
 func ConnectAndServe(f *block.BlockFile, name string, closer chan bool) error {
 	wwn := tcmu.NaaWWN{

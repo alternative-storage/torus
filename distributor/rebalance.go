@@ -5,8 +5,8 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/models"
 )
 
 // Goroutine which watches for new rings and kicks off

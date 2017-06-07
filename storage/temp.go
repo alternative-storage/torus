@@ -5,7 +5,7 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/coreos/torus"
+	"github.com/alternative-storage/torus"
 )
 
 var _ torus.BlockStore = &tempBlockStore{}

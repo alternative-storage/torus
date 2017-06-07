@@ -3,8 +3,8 @@ package etcd
 import (
 	"golang.org/x/net/context"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/ring"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/ring"
 )
 
 func (e *Etcd) watchRingUpdates() error {

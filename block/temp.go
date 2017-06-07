@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/metadata/temp"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/metadata/temp"
+	"github.com/alternative-storage/torus/models"
 )
 
 type blockTempMetadata struct {

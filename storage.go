@@ -8,11 +8,11 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/coreos/pkg/capnslog"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus/models"
 	"github.com/lpabon/godbc"
 )
 
-var BlockLog = capnslog.NewPackageLogger("github.com/coreos/torus", "blocklog")
+var BlockLog = capnslog.NewPackageLogger("github.com/alternative-storage/torus", "blocklog")
 
 type (
 	// VolumeID represents a unique identifier for a Volume.

@@ -8,7 +8,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	fsck "github.com/coreos/torus/cmd/fsck.torus/lib"
+	fsck "github.com/alternative-storage/torus/cmd/fsck.torus/lib"
 )
 
 var (

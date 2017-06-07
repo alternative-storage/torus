@@ -8,9 +8,9 @@ import (
 
 	"github.com/coreos/pkg/progressutil"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/blockset"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/blockset"
+	"github.com/alternative-storage/torus/models"
 	"golang.org/x/net/context"
 )
 

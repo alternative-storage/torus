@@ -8,9 +8,9 @@ import (
 	etcdv3 "github.com/coreos/etcd/clientv3"
 	"golang.org/x/net/context"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/metadata/etcd"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/metadata/etcd"
+	"github.com/alternative-storage/torus/models"
 )
 
 type blockEtcd struct {

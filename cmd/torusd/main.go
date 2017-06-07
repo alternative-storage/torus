@@ -15,20 +15,20 @@ import (
 	"github.com/ricochet2200/go-disk-usage/du"
 	"github.com/spf13/cobra"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/blockset"
-	"github.com/coreos/torus/distributor"
-	"github.com/coreos/torus/internal/flagconfig"
-	//      "github.com/coreos/torus/internal/http"
-	"github.com/coreos/torus/models"
-	"github.com/coreos/torus/ring"
-	"github.com/coreos/torus/tracing"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/blockset"
+	"github.com/alternative-storage/torus/distributor"
+	"github.com/alternative-storage/torus/internal/flagconfig"
+	//      "github.com/alternative-storage/torus/internal/http"
+	"github.com/alternative-storage/torus/models"
+	"github.com/alternative-storage/torus/ring"
+	"github.com/alternative-storage/torus/tracing"
 
 	// Register all the possible drivers.
-	_ "github.com/coreos/torus/block"
-	_ "github.com/coreos/torus/metadata/etcd"
-	_ "github.com/coreos/torus/metadata/temp"
-	_ "github.com/coreos/torus/storage"
+	_ "github.com/alternative-storage/torus/block"
+	_ "github.com/alternative-storage/torus/metadata/etcd"
+	_ "github.com/alternative-storage/torus/metadata/temp"
+	_ "github.com/alternative-storage/torus/storage"
 
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -105,7 +105,7 @@ func configureServer(cmd *cobra.Command, args []string) {
 	}
 	if logpkg != "" {
 		capnslog.SetGlobalLogLevel(capnslog.NOTICE)
-		rl := capnslog.MustRepoLogger("github.com/coreos/torus")
+		rl := capnslog.MustRepoLogger("github.com/alternative-storage/torus")
 		llc, err := rl.ParseLogLevelConfig(logpkg)
 		if err != nil {
 			die("error parsing logpkg: %s", err)

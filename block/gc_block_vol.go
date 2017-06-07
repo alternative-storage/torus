@@ -6,10 +6,10 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/coreos/pkg/capnslog"
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/blockset"
-	"github.com/coreos/torus/gc"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/blockset"
+	"github.com/alternative-storage/torus/gc"
+	"github.com/alternative-storage/torus/models"
 )
 
 func init() {

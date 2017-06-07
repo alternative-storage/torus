@@ -10,12 +10,12 @@ import (
 	"strings"
 
 	"github.com/coreos/pkg/capnslog"
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/models"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
-var clog = capnslog.NewPackageLogger("github.com/coreos/torus", "blockset")
+var clog = capnslog.NewPackageLogger("github.com/alternative-storage/torus", "blockset")
 
 var (
 	promCRCFail = prometheus.NewCounter(prometheus.CounterOpts{

@@ -3,9 +3,9 @@ package etcd
 import (
 	"encoding/json"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/models"
-	"github.com/coreos/torus/ring"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/models"
+	"github.com/alternative-storage/torus/ring"
 
 	etcdv3 "github.com/coreos/etcd/clientv3"
 	"golang.org/x/net/context"

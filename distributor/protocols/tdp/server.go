@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/distributor/protocols"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/distributor/protocols"
 )
 
 const defaultPort = "40000"

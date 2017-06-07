@@ -5,9 +5,9 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/block"
-	"github.com/coreos/torus/internal/nbd"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/block"
+	"github.com/alternative-storage/torus/internal/nbd"
 
 	"github.com/spf13/cobra"
 )

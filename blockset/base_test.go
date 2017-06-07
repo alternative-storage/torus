@@ -5,10 +5,10 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/coreos/torus"
+	"github.com/alternative-storage/torus"
 
 	// Register storage drivers.
-	_ "github.com/coreos/torus/storage"
+	_ "github.com/alternative-storage/torus/storage"
 )
 
 type makeTestBlockset func(s torus.BlockStore) blockset

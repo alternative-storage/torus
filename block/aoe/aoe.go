@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/coreos/torus/block"
+	"github.com/alternative-storage/torus/block"
 
 	"github.com/coreos/pkg/capnslog"
 	"github.com/mdlayher/aoe"
@@ -19,7 +19,7 @@ import (
 )
 
 var (
-	clog          = capnslog.NewPackageLogger("github.com/coreos/torus", "aoe")
+	clog          = capnslog.NewPackageLogger("github.com/alternative-storage/torus", "aoe")
 	broadcastAddr = net.HardwareAddr([]byte{0xff, 0xff, 0xff, 0xff, 0xff, 0xff})
 )
 

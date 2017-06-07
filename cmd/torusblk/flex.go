@@ -11,8 +11,8 @@ import (
 
 	"github.com/coreos/go-systemd/dbus"
 	"github.com/coreos/go-systemd/unit"
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/internal/nbd"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/internal/nbd"
 	godbus "github.com/godbus/dbus"
 	"github.com/kardianos/osext"
 	"github.com/spf13/cobra"

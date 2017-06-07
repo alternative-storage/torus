@@ -3,7 +3,7 @@ ifeq ($(origin VERSION), undefined)
 endif
 HOST_GOOS=$(shell go env GOOS)
 HOST_GOARCH=$(shell go env GOARCH)
-REPOPATH = github.com/coreos/torus
+REPOPATH = github.com/alternative-storage/torus
 
 VERBOSE_1 := -v
 VERBOSE_2 := -v -x

@@ -5,7 +5,7 @@ import (
 
 	etcdv3 "github.com/coreos/etcd/clientv3"
 
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus/models"
 )
 
 func (c *etcdCtx) DumpMetadata(w io.Writer) error {

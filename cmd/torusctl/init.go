@@ -5,14 +5,14 @@ import (
 	"os"
 	"strings"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/blockset"
-	"github.com/coreos/torus/internal/flagconfig"
-	"github.com/coreos/torus/ring"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/blockset"
+	"github.com/alternative-storage/torus/internal/flagconfig"
+	"github.com/alternative-storage/torus/ring"
 	"github.com/dustin/go-humanize"
 	"github.com/spf13/cobra"
 
-	_ "github.com/coreos/torus/metadata/etcd"
+	_ "github.com/alternative-storage/torus/metadata/etcd"
 )
 
 var (

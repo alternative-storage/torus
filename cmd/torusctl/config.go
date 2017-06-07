@@ -8,11 +8,11 @@ import (
 	"os/user"
 	"path/filepath"
 
-	cli "github.com/coreos/torus/cliconfig"
-	"github.com/coreos/torus/internal/flagconfig"
+	cli "github.com/alternative-storage/torus/cliconfig"
+	"github.com/alternative-storage/torus/internal/flagconfig"
 	"github.com/spf13/cobra"
 
-	_ "github.com/coreos/torus/metadata/etcd"
+	_ "github.com/alternative-storage/torus/metadata/etcd"
 )
 
 const (

@@ -4,15 +4,15 @@
 
 #### Download a release
 
-Releases are available at http://github.com/coreos/torus/releases
+Releases are available at http://github.com/alternative-storage/torus/releases
 
 #### Build from master
 
 For builds, Torus assumes a Go installation and a correctly configured [GOPATH](https://golang.org/doc/code.html#Organization). Simply checkout the repo and use the Makefile to build.
 
 ```
-git clone git@github.com:coreos/torus $GOPATH/src/github.com/coreos/torus
-cd $GOPATH/src/github.com/coreos/torus
+git clone git@github.com:coreos/torus $GOPATH/src/github.com/alternative-storage/torus
+cd $GOPATH/src/github.com/alternative-storage/torus
 make
 ```
 

@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus/models"
 )
 
 func MkdirsFor(dir string) error {

@@ -1,8 +1,8 @@
 package block
 
 import (
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/blockset"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/blockset"
 	"golang.org/x/net/context"
 )
 

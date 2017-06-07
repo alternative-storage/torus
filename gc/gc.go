@@ -5,12 +5,12 @@ package gc
 
 import (
 	"github.com/coreos/pkg/capnslog"
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/models"
 	"golang.org/x/net/context"
 )
 
-var clog = capnslog.NewPackageLogger("github.com/coreos/torus", "gc")
+var clog = capnslog.NewPackageLogger("github.com/alternative-storage/torus", "gc")
 
 type controller struct {
 	gcs []GC

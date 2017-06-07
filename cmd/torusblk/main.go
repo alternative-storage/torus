@@ -7,15 +7,15 @@ import (
 	"github.com/coreos/pkg/capnslog"
 	"github.com/spf13/cobra"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/distributor"
-	"github.com/coreos/torus/internal/flagconfig"
-	//	"github.com/coreos/torus/internal/http"
-	"github.com/coreos/torus/tracing"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/distributor"
+	"github.com/alternative-storage/torus/internal/flagconfig"
+	//	"github.com/alternative-storage/torus/internal/http"
+	"github.com/alternative-storage/torus/tracing"
 
 	// Register all the drivers.
-	_ "github.com/coreos/torus/metadata/etcd"
-	_ "github.com/coreos/torus/storage"
+	_ "github.com/alternative-storage/torus/metadata/etcd"
+	_ "github.com/alternative-storage/torus/storage"
 )
 
 var (
@@ -74,7 +74,7 @@ func configureServer(cmd *cobra.Command, args []string) {
 	}
 	if logpkg != "" {
 		capnslog.SetGlobalLogLevel(capnslog.NOTICE)
-		rl := capnslog.MustRepoLogger("github.com/coreos/torus")
+		rl := capnslog.MustRepoLogger("github.com/alternative-storage/torus")
 		llc, err := rl.ParseLogLevelConfig(logpkg)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error parsing logpkg: %s\n", err)

@@ -7,10 +7,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/metadata"
-	"github.com/coreos/torus/models"
-	"github.com/coreos/torus/ring"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/metadata"
+	"github.com/alternative-storage/torus/models"
+	"github.com/alternative-storage/torus/ring"
 
 	etcdv3 "github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/etcdserver/api/v3rpc/rpctypes"
@@ -22,10 +22,10 @@ import (
 // Package rule for etcd keys: always put the static parts first, followed by
 // the variables. This makes range gets a lot easier.
 
-var clog = capnslog.NewPackageLogger("github.com/coreos/torus", "etcd")
+var clog = capnslog.NewPackageLogger("github.com/alternative-storage/torus", "etcd")
 
 const (
-	KeyPrefix      = "/github.com/coreos/torus/"
+	KeyPrefix      = "/github.com/alternative-storage/torus/"
 	peerTimeoutMax = 50 * time.Second
 	leaseTTL       = 30
 )

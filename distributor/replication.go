@@ -4,11 +4,11 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/coreos/torus"
+	"github.com/alternative-storage/torus"
 
 	// Import all the protocols we understand
-	_ "github.com/coreos/torus/distributor/protocols/grpc"
-	_ "github.com/coreos/torus/distributor/protocols/tdp"
+	_ "github.com/alternative-storage/torus/distributor/protocols/grpc"
+	_ "github.com/alternative-storage/torus/distributor/protocols/tdp"
 )
 
 // ListenReplication opens the internal networking port and connects to the cluster

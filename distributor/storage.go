@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/coreos/torus"
+	"github.com/alternative-storage/torus"
 
 	"github.com/opentracing/opentracing-go"
 	"golang.org/x/net/context"

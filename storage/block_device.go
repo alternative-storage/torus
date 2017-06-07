@@ -8,9 +8,9 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/coreos/torus"
+	"github.com/alternative-storage/torus"
 
-	blockDevice "github.com/coreos/torus/storage/block_device"
+	blockDevice "github.com/alternative-storage/torus/storage/block_device"
 )
 
 func init() {

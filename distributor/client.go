@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/distributor/protocols"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/distributor/protocols"
 	"github.com/opentracing/opentracing-go"
 	//"github.com/opentracing/opentracing-go/log"
 

@@ -8,11 +8,11 @@ import (
 	"time"
 
 	"github.com/coreos/pkg/capnslog"
-	"github.com/coreos/torus"
+	"github.com/alternative-storage/torus"
 	"golang.org/x/net/context"
 )
 
-var clog = capnslog.NewPackageLogger("github.com/coreos/torus", "tdp")
+var clog = capnslog.NewPackageLogger("github.com/alternative-storage/torus", "tdp")
 
 var serverReadTimeout = 5 * time.Second
 

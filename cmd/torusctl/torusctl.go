@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/coreos/pkg/capnslog"
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/internal/flagconfig"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/internal/flagconfig"
 	"github.com/spf13/cobra"
 )
 
@@ -65,7 +65,7 @@ func configure(cmd *cobra.Command, args []string) {
 	}
         if logpkg != "" {
                 capnslog.SetGlobalLogLevel(capnslog.NOTICE)
-                rl := capnslog.MustRepoLogger("github.com/coreos/torus")
+                rl := capnslog.MustRepoLogger("github.com/alternative-storage/torus")
                 llc, err := rl.ParseLogLevelConfig(logpkg)
                 if err != nil {
                         fmt.Fprintf(os.Stderr, "error parsing logpkg: %s\n", err)

@@ -6,7 +6,7 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus/models"
 	"github.com/prometheus/client_golang/prometheus"
 )
 

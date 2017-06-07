@@ -7,11 +7,11 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/block"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/block"
 	"github.com/spf13/cobra"
 
-	"github.com/coreos/torus/internal/tcmu"
+	"github.com/alternative-storage/torus/internal/tcmu"
 )
 
 var (

@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/distributor"
-	"github.com/coreos/torus/internal/flagconfig"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/distributor"
+	"github.com/alternative-storage/torus/internal/flagconfig"
 
 	// Register all the drivers.
-	_ "github.com/coreos/torus/metadata/etcd"
-	_ "github.com/coreos/torus/storage"
+	_ "github.com/alternative-storage/torus/metadata/etcd"
+	_ "github.com/alternative-storage/torus/storage"
 
 	"github.com/dustin/go-humanize"
 )

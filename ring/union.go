@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/models"
 )
 
 type unionRing struct {

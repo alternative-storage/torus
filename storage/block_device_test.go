@@ -14,9 +14,9 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/coreos/torus"
-	fsck "github.com/coreos/torus/cmd/fsck.torus/lib"
-	mkfs "github.com/coreos/torus/cmd/mkfs.torus/lib"
+	"github.com/alternative-storage/torus"
+	fsck "github.com/alternative-storage/torus/cmd/fsck.torus/lib"
+	mkfs "github.com/alternative-storage/torus/cmd/mkfs.torus/lib"
 )
 
 func stderr(msg string, args ...interface{}) {

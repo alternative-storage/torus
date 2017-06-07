@@ -1,4 +1,4 @@
-package: github.com/coreos/torus
+package: github.com/alternative-storage/torus
 import:
 - package: github.com/DeanThompson/ginpprof
 - package: github.com/RoaringBitmap/roaring

@@ -7,7 +7,7 @@ import (
 	"syscall"
 	"time"
 
-	blockDevice "github.com/coreos/torus/storage/block_device"
+	blockDevice "github.com/alternative-storage/torus/storage/block_device"
 )
 
 const (

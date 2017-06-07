@@ -2,7 +2,7 @@ package torus
 
 import (
 	"github.com/RoaringBitmap/roaring"
-	"github.com/coreos/torus/models"
+	"github.com/alternative-storage/torus/models"
 	"golang.org/x/net/context"
 )
 

@@ -10,9 +10,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/coreos/torus"
-	"github.com/coreos/torus/block"
-	"github.com/coreos/torus/block/aoe"
+	"github.com/alternative-storage/torus"
+	"github.com/alternative-storage/torus/block"
+	"github.com/alternative-storage/torus/block/aoe"
 )
 
 const (

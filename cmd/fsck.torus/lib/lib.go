@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	blockDevice "github.com/coreos/torus/storage/block_device"
+	blockDevice "github.com/alternative-storage/torus/storage/block_device"
 )
 
 func stderr(msg string, args ...interface{}) {
