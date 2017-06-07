@@ -13,9 +13,15 @@ Torus provides a resource pool and basic file primitives from a set of daemons r
 
 Sharding is done via a consistent hash function, controlled in the simple case by a hash ring algorithm, but fully extensible to arbitrary maps, rack-awareness, and other nice features. The project name comes from this: a hash 'ring' plus a 'volume' is a torus. 
 
-## Project Status
+## Project Status and Background
 
-This project is experimental status currently.
+This project is experimental status at this point.
+
+After forked from [original project](https://github.com/coreos/torus)(retired currently), this project integrated [opentracing](http://opentracing.io/) with [Jaeger](http://jaeger.readthedocs.io/).
+
+![opentracing screen](Documentation/opentracing-span.png)
+
+It plans to create a bit more new feature, but performance improvment is the highest priority.
 
 ## Trying out Torus
 
