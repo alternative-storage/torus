@@ -1,5 +1,5 @@
 FROM golang:latest
-MAINTAINER Barak Michener <barak.michener@coreos.com>
+MAINTAINER Kenjiro Nakayama <nakayamakenjiro@gmail.com>
 
 # Set up workdir
 WORKDIR /go/src/github.com/alternative-storage/torus
