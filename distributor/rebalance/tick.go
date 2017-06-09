@@ -6,8 +6,8 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/coreos/pkg/capnslog"
 	"github.com/alternative-storage/torus"
+	"github.com/coreos/pkg/capnslog"
 	"github.com/opentracing/opentracing-go"
 )
 

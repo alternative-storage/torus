@@ -10,8 +10,8 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/coreos/pkg/capnslog"
 	"github.com/alternative-storage/torus"
+	"github.com/coreos/pkg/capnslog"
 )
 
 var _ torus.BlockStore = &mfileBlock{}

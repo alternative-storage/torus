@@ -7,11 +7,11 @@ import (
 	"net/url"
 	"sync"
 
-	"github.com/coreos/pkg/capnslog"
 	"github.com/alternative-storage/torus"
 	"github.com/alternative-storage/torus/distributor/protocols"
 	"github.com/alternative-storage/torus/distributor/rebalance"
 	"github.com/alternative-storage/torus/gc"
+	"github.com/coreos/pkg/capnslog"
 )
 
 var (

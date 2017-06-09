@@ -5,11 +5,11 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/coreos/pkg/capnslog"
 	"github.com/alternative-storage/torus"
 	"github.com/alternative-storage/torus/blockset"
 	"github.com/alternative-storage/torus/gc"
 	"github.com/alternative-storage/torus/models"
+	"github.com/coreos/pkg/capnslog"
 )
 
 func init() {

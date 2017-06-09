@@ -4,9 +4,9 @@
 package ring
 
 import (
-	"github.com/coreos/pkg/capnslog"
 	"github.com/alternative-storage/torus"
 	"github.com/alternative-storage/torus/models"
+	"github.com/coreos/pkg/capnslog"
 )
 
 var clog = capnslog.NewPackageLogger("github.com/alternative-storage/torus", "ring")

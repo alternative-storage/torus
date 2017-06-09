@@ -3,10 +3,10 @@ package torustcmu
 import (
 	"fmt"
 
+	"github.com/alternative-storage/torus/block"
 	"github.com/coreos/go-tcmu"
 	"github.com/coreos/go-tcmu/scsi"
 	"github.com/coreos/pkg/capnslog"
-	"github.com/alternative-storage/torus/block"
 )
 
 const (
