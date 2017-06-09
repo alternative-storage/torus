@@ -6,8 +6,8 @@ import (
 	"golang.org/x/net/context"
 
 	"github.com/RoaringBitmap/roaring"
-	"github.com/coreos/pkg/capnslog"
 	"github.com/alternative-storage/torus"
+	"github.com/coreos/pkg/capnslog"
 )
 
 type baseBlockset struct {

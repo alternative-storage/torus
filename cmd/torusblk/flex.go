@@ -9,10 +9,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/coreos/go-systemd/dbus"
-	"github.com/coreos/go-systemd/unit"
 	"github.com/alternative-storage/torus"
 	"github.com/alternative-storage/torus/internal/nbd"
+	"github.com/coreos/go-systemd/dbus"
+	"github.com/coreos/go-systemd/unit"
 	godbus "github.com/godbus/dbus"
 	"github.com/kardianos/osext"
 	"github.com/spf13/cobra"

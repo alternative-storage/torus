@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/coreos/pkg/capnslog"
 	"github.com/alternative-storage/torus"
 	"github.com/alternative-storage/torus/internal/flagconfig"
+	"github.com/coreos/pkg/capnslog"
 	"github.com/spf13/cobra"
 )
 
 var (
-        logpkg   string
-	debug bool
+	logpkg string
+	debug  bool
 )
 
 var rootCommand = &cobra.Command{
@@ -63,14 +63,14 @@ func configure(cmd *cobra.Command, args []string) {
 	if debug {
 		capnslog.SetGlobalLogLevel(capnslog.DEBUG)
 	}
-        if logpkg != "" {
-                capnslog.SetGlobalLogLevel(capnslog.NOTICE)
-                rl := capnslog.MustRepoLogger("github.com/alternative-storage/torus")
-                llc, err := rl.ParseLogLevelConfig(logpkg)
-                if err != nil {
-                        fmt.Fprintf(os.Stderr, "error parsing logpkg: %s\n", err)
-                        os.Exit(1)
-                }
-                rl.SetLogLevel(llc)
-        }
+	if logpkg != "" {
+		capnslog.SetGlobalLogLevel(capnslog.NOTICE)
+		rl := capnslog.MustRepoLogger("github.com/alternative-storage/torus")
+		llc, err := rl.ParseLogLevelConfig(logpkg)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "error parsing logpkg: %s\n", err)
+			os.Exit(1)
+		}
+		rl.SetLogLevel(llc)
+	}
 }

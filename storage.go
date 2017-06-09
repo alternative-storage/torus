@@ -7,8 +7,8 @@ import (
 
 	"golang.org/x/net/context"
 
-	"github.com/coreos/pkg/capnslog"
 	"github.com/alternative-storage/torus/models"
+	"github.com/coreos/pkg/capnslog"
 	"github.com/lpabon/godbc"
 )
 
