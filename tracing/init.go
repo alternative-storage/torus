@@ -1,17 +1,11 @@
 package jaeger
 
 import (
-	"os"
 	"time"
 
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go/config"
 )
-
-func hostname() string {
-	h, _ := os.Hostname()
-	return h
-}
 
 // Init creates a new instance of tracer and set it as GlobalTracer.
 func Init(serviceName string) error {
