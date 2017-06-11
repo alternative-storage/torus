@@ -1,8 +1,8 @@
 package torustcmu
 
 import (
-	"github.com/coreos/go-tcmu"
-	"github.com/coreos/go-tcmu/scsi"
+	"github.com/alternative-storage/go-tcmu"
+	"github.com/alternative-storage/go-tcmu/scsi"
 )
 
 func (h *torusHandler) handleSyncCommand(cmd *tcmu.SCSICmd) (tcmu.SCSIResponse, error) {
