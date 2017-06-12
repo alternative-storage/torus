@@ -49,10 +49,10 @@ func ConnectAndServe(f *block.BlockFile, name string, closer chan bool) error {
 			}, n),
 	}
 	d, err := tcmu.OpenTCMUDevice(devPath, h)
+	defer d.Close()
 	if err != nil {
 		return err
 	}
-	defer d.Close()
 	fmt.Printf("Attached to %s/%s. Server loop begins ... \n", devPath, name)
 	<-closer
 	return nil
