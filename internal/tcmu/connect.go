@@ -22,6 +22,11 @@ func ConnectAndServe(f *block.BlockFile, name string, closer chan bool) error {
 		OUI:      "000000",
 		VendorID: tcmu.GenerateSerial(name),
 	}
+	// TODO(nak3): Scale up NBD by handling multiple requests.
+	// Requires thread-safety across the block.BlockFile/torus.File
+	//n := runtime.GOMAXPROCS(0) - 1
+	n := 1
+
 	h := &tcmu.SCSIHandler{
 		HBA:        30,
 		LUN:        0,
@@ -37,11 +42,11 @@ func ConnectAndServe(f *block.BlockFile, name string, closer chan bool) error {
 				file: f,
 				name: name,
 				inq: &tcmu.InquiryInfo{
-					VendorID:   "CoreOS",
+					VendorID:   "AlternativeStorage",
 					ProductID:  "TorusBlk",
 					ProductRev: "0001",
 				},
-			}, 1),
+			}, n),
 	}
 	d, err := tcmu.OpenTCMUDevice(devPath, h)
 	if err != nil {

@@ -1,5 +1,5 @@
-hash: 16313cd078f9d6697e6c3a67da3732df7a8e81dbb11a1b14e342fdbec68c2cb7
-updated: 2017-06-11T10:37:16.27709842+09:00
+hash: d9f6986b2e7ed5f4eb2d76ba370d3820cf7689b348cfe7db8b37a9fbd2ecdc48
+updated: 2017-06-12T12:15:20.426573709+09:00
 imports:
 - name: github.com/alternative-storage/go-tcmu
   version: 5db4f4011c3aa62b8a1436c86e373a014b8317a0
@@ -31,8 +31,6 @@ imports:
   - dbus
   - journal
   - unit
-- name: github.com/coreos/go-tcmu
-  version: a6fc46a3b7d2cf28ecdf7b797241b1bf6723459d
 - name: github.com/coreos/pkg
   version: 3ac0863d7acf3bc44daf49afef8919af12f704ef
   subpackages:

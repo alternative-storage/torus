@@ -44,5 +44,5 @@ import:
   - http2/hpack
   - internal/timeseries
 - package: google.golang.org/grpc
-- package: github.com/coreos/go-tcmu
+- package: github.com/alternative-storage/go-tcmu
 - package: github.com/lpabon/godbc
