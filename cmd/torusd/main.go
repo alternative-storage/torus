@@ -19,7 +19,6 @@ import (
 	"github.com/alternative-storage/torus/blockset"
 	"github.com/alternative-storage/torus/distributor"
 	"github.com/alternative-storage/torus/internal/flagconfig"
-	//      "github.com/alternative-storage/torus/internal/http"
 	"github.com/alternative-storage/torus/models"
 	"github.com/alternative-storage/torus/ring"
 	"github.com/alternative-storage/torus/tracing"
@@ -29,6 +28,7 @@ import (
 	_ "github.com/alternative-storage/torus/metadata/etcd"
 	_ "github.com/alternative-storage/torus/metadata/temp"
 	_ "github.com/alternative-storage/torus/storage"
+	_ "net/http/pprof"
 
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -39,8 +39,6 @@ var (
 	httpAddress string
 	peerAddress string
 	sizeStr     string
-	host        string
-	port        int
 	debugInit   bool
 	autojoin    bool
 	logpkg      string
@@ -69,8 +67,7 @@ func init() {
 	rootCommand.PersistentFlags().StringVarP(&dataDir, "data-dir", "", "torus-data", "Path to the data directory")
 	rootCommand.PersistentFlags().BoolVarP(&debug, "debug", "", false, "Turn on debug output")
 	rootCommand.PersistentFlags().BoolVarP(&debugInit, "debug-init", "", false, "Run a default init for the MDS if one doesn't exist")
-	rootCommand.PersistentFlags().StringVarP(&host, "host", "", "", "Host to listen on for HTTP")
-	rootCommand.PersistentFlags().IntVarP(&port, "port", "", 4321, "Port to listen on for HTTP")
+	rootCommand.PersistentFlags().StringVarP(&httpAddress, "http", "", "", "HTTP endpoint for debug and stats")
 	rootCommand.PersistentFlags().StringVarP(&peerAddress, "peer-address", "", "", "Address to listen on for intra-cluster data")
 	rootCommand.PersistentFlags().StringVarP(&sizeStr, "size", "", "1GiB", "How much disk space to use for this storage node")
 	rootCommand.PersistentFlags().StringVarP(&logpkg, "logpkg", "", "", "Specific package logging")
@@ -111,10 +108,6 @@ func configureServer(cmd *cobra.Command, args []string) {
 			die("error parsing logpkg: %s", err)
 		}
 		rl.SetLogLevel(llc)
-	}
-
-	if host != "" {
-		httpAddress = fmt.Sprintf("%s:%d", host, port)
 	}
 
 	var (
