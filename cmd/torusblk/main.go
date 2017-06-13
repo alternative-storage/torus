@@ -2,26 +2,28 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/coreos/pkg/capnslog"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/spf13/cobra"
 
 	"github.com/alternative-storage/torus"
 	"github.com/alternative-storage/torus/distributor"
 	"github.com/alternative-storage/torus/internal/flagconfig"
-	//	"github.com/alternative-storage/torus/internal/http"
 	"github.com/alternative-storage/torus/tracing"
 
 	// Register all the drivers.
 	_ "github.com/alternative-storage/torus/metadata/etcd"
 	_ "github.com/alternative-storage/torus/storage"
+	_ "net/http/pprof"
 )
 
 var (
-	logpkg   string
-	httpAddr string
-	cfg      torus.Config
+	logpkg      string
+	httpAddress string
+	cfg         torus.Config
 
 	debug bool
 )
@@ -60,7 +62,7 @@ func init() {
 	rootCommand.AddCommand(flexprepvolCommand)
 
 	rootCommand.PersistentFlags().StringVarP(&logpkg, "logpkg", "", "", "Specific package logging")
-	rootCommand.PersistentFlags().StringVarP(&httpAddr, "http", "", "", "HTTP endpoint for debug and stats")
+	rootCommand.PersistentFlags().StringVarP(&httpAddress, "http", "", "", "HTTP endpoint for debug and stats")
 	rootCommand.PersistentFlags().BoolVarP(&debug, "debug", "", false, "Turn on debug output")
 	flagconfig.AddConfigFlags(rootCommand.PersistentFlags())
 }
@@ -97,11 +99,13 @@ func createServer() *torus.Server {
 		fmt.Printf("couldn't start: %s", err)
 		os.Exit(1)
 	}
-	/*
-		if httpAddr != "" {
-			go http.ServeHTTP(httpAddr, srv)
-		}
-	*/
+	if httpAddress != "" {
+		go func() {
+			http.Handle("/metrics", prometheus.Handler())
+			http.ListenAndServe(httpAddress, nil)
+		}()
+	}
+
 	return srv
 }
 
