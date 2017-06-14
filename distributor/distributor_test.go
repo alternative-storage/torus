@@ -28,7 +28,8 @@ func createThree(t *testing.T) ([]*torus.Server, *temp.Server) {
 	s := temp.NewServer()
 	for i := 0; i < 3; i++ {
 		srv := newServer(s)
-		addr := fmt.Sprintf("http://127.0.0.1:%d", 40000+i)
+		// avoid port conflict with integration/integration_test.go
+		addr := fmt.Sprintf("http://127.0.0.1:%d", 30000+i)
 		uri, err := url.Parse(addr)
 		if err != nil {
 			t.Fatal(err)
