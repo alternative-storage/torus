@@ -1,5 +1,5 @@
-hash: d9f6986b2e7ed5f4eb2d76ba370d3820cf7689b348cfe7db8b37a9fbd2ecdc48
-updated: 2017-06-12T12:15:20.426573709+09:00
+hash: da7792839b9e11d41554dd51029399c1bd178f3bd7363692a2cb746aa0073531
+updated: 2017-06-14T21:25:28.399459906+09:00
 imports:
 - name: github.com/alternative-storage/go-tcmu
   version: 5db4f4011c3aa62b8a1436c86e373a014b8317a0
@@ -15,6 +15,8 @@ imports:
   version: 4c0e84591b9aa9e6dcfdf3e020114cd81f89d5f9
   subpackages:
   - quantile
+- name: github.com/cespare/prettybench
+  version: 03b8cfe5406ce67a0b0da46f0c9e78b3d915a2c1
 - name: github.com/codahale/hdrhistogram
   version: f8ad88b59a584afeee9d334eff879b104439117b
 - name: github.com/coreos/etcd
@@ -154,7 +156,7 @@ imports:
   subpackages:
   - ssh/terminal
 - name: golang.org/x/net
-  version: 1a68b1313cf4ad7778376e82641197b60c02f65c
+  version: dfe83d419c9403b40b19d08cdba2afec27b002f7
   repo: https://go.googlesource.com/net
   subpackages:
   - bpf
