@@ -5,6 +5,11 @@ HOST_GOOS=$(shell go env GOOS)
 HOST_GOARCH=$(shell go env GOARCH)
 REPOPATH = github.com/alternative-storage/torus
 
+export GOPATH := $(realpath ../../../..)
+#                              ^  ^  ^~ GOPATH
+#                              |  |~ GOPATH/src
+#                              |~ GOPATH/src/github.com
+
 VERBOSE_1 := -v
 VERBOSE_2 := -v -x
 
@@ -18,6 +23,10 @@ build: vendor
 
 test: tools/glide
 	go test --race $(shell ./tools/glide novendor)
+
+bench: tools/glide
+	go install ./vendor/github.com/cespare/prettybench
+	go test -bench $(shell ./tools/glide novendor) | $(GOPATH)/bin/prettybench
 
 vet: tools/glide
 	go vet $(shell ./tools/glide novendor)

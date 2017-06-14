@@ -46,3 +46,4 @@ import:
 - package: google.golang.org/grpc
 - package: github.com/alternative-storage/go-tcmu
 - package: github.com/lpabon/godbc
+- package: github.com/cespare/prettybench
