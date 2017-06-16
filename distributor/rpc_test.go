@@ -23,6 +23,11 @@ const (
 func TestPutBlock(t *testing.T) {
 	t.Log("Write and Read through gRPC")
 	srvs, _ := ringN(t, 3)
+	defer func() {
+		for _, s := range srvs {
+			s.Close()
+		}
+	}()
 	p, err := srvs[0].MDS.GetPeers()
 	if err != nil {
 		t.Fatal(err)
@@ -36,6 +41,7 @@ func TestPutBlock(t *testing.T) {
 	}
 
 	dist, err := newDistributor(srvs[0], addr)
+	defer dist.Close()
 	if err != nil {
 		t.Fatal(err)
 	}
