@@ -1,21 +1,22 @@
 language: go
-
 sudo: false
-
 go:
-  - 1.7
-  - 1.8
-  - tip
-
+- 1.7
+- 1.8
+- tip
+env:
+  global:
+  - PATH=$HOME/gopath/bin:$PATH
+  - secure: byoESXQPm4CmZAwmWekaHjZofZYE8hBXu6Dg9ntCOcmg695W35Hre1SPth6v0IvJlxwEbO55ClO4VCJ701N2omxQCzI2QduO5QgPCVsZdFecKCq4XwRmpD89kCIt9cC62QIL3qlVajBWyoaLFKXhRkH/aQkT5iT+UVrH6oMf5Hmac8gVWk2+hIIAH79SOgASLxLOTcWNmAFPxESiPB4arWPbAGHEoivn5TrrWT8Ap18wP6yDHNaRzZ/tBT3SXvYRK4PBip07y4Wvlxgdtv5zpt79GBX0bclWSx8p10W7Y6HH6aOpt82V+pARf81aZ9bLHD/geP/HMWGoMh7TK1PSGZtNKsESI6GkMNIVpFNsZhdYQOIBuCPi0/PL0E1xoV4qD+uO1mDAY8H5s+PbMZk/MsoJVnYmdlUnpRuU0M0snsQXkuOsrKOxThYbUrQ3s65faeum2tfLvDpvuBkuA2Fimf7AQvr/ZbNE3tGbtHB+kR9YFYfy4holqWhfH0nOTuOwmBdjdC2f+Xa+Xx9ewGn1wWtDv6ViBRM1MUGcEQwdsndCtnBJVXHvkiGR+nwQs0jrVwi/LjLrI/Z6MAWgb6Cy7tf0uHi/ofHzxsr6kzkm2dxe3bTAnoR8tgXkb+WPP/CbKB0ALQt35a0v/8ul8GSze42Vo9WwFPjiYoLbTUry5zk=
 install:
-  - make vendor
-
+- make vendor
+- go get github.com/mattn/goveralls github.com/modocache/gover
 script:
-  - make fmt
-  - make vet
-  - make test
-  - make build
-
+- make fmt
+- make vet
+- make test
+- make build
+- goveralls -service=travis-ci
 matrix:
   allow_failures:
-    - go: tip
+  - go: tip
