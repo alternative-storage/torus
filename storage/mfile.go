@@ -222,7 +222,7 @@ func (m *mfileBlock) WriteBlock(_ context.Context, s torus.BlockRef, data []byte
 	}
 	index := m.findEmpty()
 	if index == -1 {
-		clog.Error("mfile: out of space")
+		clog.Error("mfile: out of space in data")
 		promBlockWritesFailed.WithLabelValues(m.name).Inc()
 		return torus.ErrOutOfSpace
 	}
@@ -264,7 +264,7 @@ func (m *mfileBlock) WriteBuf(_ context.Context, s torus.BlockRef) ([]byte, erro
 	}
 	index := m.findEmpty()
 	if index == -1 {
-		clog.Error("mfile: out of space")
+		clog.Error("mfile: out of space in metadata")
 		promBlockWritesFailed.WithLabelValues(m.name).Inc()
 		return nil, torus.ErrOutOfSpace
 	}
