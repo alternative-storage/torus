@@ -64,4 +64,26 @@ func TestWriteBlock(t *testing.T) {
 	if !reflect.DeepEqual(ret[:len(data)], data) {
 		t.Fatal("Got useless data back")
 	}
+
+	// test HasBlock
+	has, err := mfb.HasBlock(nil, ref)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !has {
+		t.Fatal("Data disappeared")
+	}
+
+	// test DeleteBlock
+	err = mfb.DeleteBlock(nil, ref)
+	if err != nil {
+		t.Fatal(err)
+	}
+	has, err = mfb.HasBlock(nil, ref)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if has {
+		t.Fatal("Failed to delete")
+	}
 }
