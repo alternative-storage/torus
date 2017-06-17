@@ -77,3 +77,16 @@ func TestWrites(t *testing.T) {
 		t.Fatal("Got useless data back")
 	}
 }
+
+func TestNumBlocks(t *testing.T) {
+	s := uint64(10240) // 1kb
+	bs := uint64(1024) // 2kb
+	expected := s / bs
+	m := &MFile{
+		blkSize: bs,
+		size:    s,
+	}
+	if m.NumBlocks() != expected {
+		t.Fatalf("Got wrong number of blocks %d, expected %d", m.NumBlocks(), expected)
+	}
+}
