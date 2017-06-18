@@ -22,6 +22,7 @@ type BlockVolume struct {
 	volume *models.Volume
 }
 
+// CreateBlockVolume creates volume in metadata service.
 func CreateBlockVolume(mds torus.MetadataService, volume string, size uint64) error {
 	id, err := mds.NewVolumeID()
 	if err != nil {
