@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"golang.org/x/net/context"
+	"math/rand"
 	"net/url"
 	"testing"
 	"time"
@@ -23,6 +24,11 @@ const (
 func TestPutBlock(t *testing.T) {
 	t.Log("Write and Read through gRPC")
 	srvs, _ := ringN(t, 3)
+	defer func() {
+		for _, s := range srvs {
+			s.Close()
+		}
+	}()
 	p, err := srvs[0].MDS.GetPeers()
 	if err != nil {
 		t.Fatal(err)
@@ -32,10 +38,11 @@ func TestPutBlock(t *testing.T) {
 	}
 	addr := &url.URL{
 		Scheme: "http",
-		Host:   "127.0.0.1:20011",
+		Host:   "127.0.0.1:0",
 	}
 
 	dist, err := newDistributor(srvs[0], addr)
+	defer dist.Close()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -64,9 +71,11 @@ func TestPutBlock(t *testing.T) {
 func createN(t testing.TB, n int) ([]*torus.Server, *temp.Server) {
 	var out []*torus.Server
 	s := temp.NewServer()
+	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < n; i++ {
 		srv := newServer(s)
-		addr := fmt.Sprintf("http://127.0.0.1:%d", 20000+i)
+		// TODO :0 doesn't work and currently uses workaround.
+		addr := fmt.Sprintf("http://127.0.0.1:%d", 20000+rand.Intn(1000))
 		uri, err := url.Parse(addr)
 		if err != nil {
 			t.Fatal(err)
