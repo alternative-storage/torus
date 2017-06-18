@@ -27,7 +27,7 @@ func TestWriteBlock(t *testing.T) {
 	}
 	addr := &url.URL{
 		Scheme: "http",
-		Host:   "127.0.0.1:20011",
+		Host:   "127.0.0.1:0",
 	}
 
 	dist, err := newDistributor(srvs[0], addr)
