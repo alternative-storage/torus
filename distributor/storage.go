@@ -186,8 +186,8 @@ func (d *Distributor) WriteBlock(ctx context.Context, i torus.BlockRef, data []b
 	ctx = opentracing.ContextWithSpan(ctx, span)
 	defer span.Finish()
 
-	d.mut.RLock()
-	defer d.mut.RUnlock()
+	d.mut.Lock()
+	defer d.mut.Unlock()
 	peers, err := d.ring.GetPeers(i)
 	if err != nil {
 		return err
