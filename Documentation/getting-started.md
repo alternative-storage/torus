@@ -11,7 +11,7 @@ Releases are available at http://github.com/alternative-storage/torus/releases
 For builds, Torus assumes a Go installation and a correctly configured [GOPATH](https://golang.org/doc/code.html#Organization). Simply checkout the repo and use the Makefile to build.
 
 ```
-git clone git@github.com:coreos/torus $GOPATH/src/github.com/alternative-storage/torus
+git clone git@github.com:alternative-storage/torus.git $GOPATH/src/github.com/alternative-storage/torus
 cd $GOPATH/src/github.com/alternative-storage/torus
 make
 ```
@@ -80,19 +80,6 @@ This runs a storage node without HTTP. Add `--host` and `--port` to open the HTT
 
 Multiple instances can be run, so long as the ports don't conflict and you keep separate data dirs.
 
-#### Running with rkt
-The following will start a local three node torus cluster::
-```
-$ rkt fetch quay.io/coreos/torus
-$ mkdir -p /tmp/torus/{1,2,3}
-$ rkt run --volume=volume-data,kind=host,source=/tmp/torus/1 \
-    --set-env LISTEN_HOST=0.0.0.0 \
-    --set-env PEER_ADDRESS=http://0.0.0.0:40000 \
-    --set-env ETCD_HOST="${ETCD_IP}" quay.io/coreos/torus
-```
-
-Start two additional instances of torus replacing `--volume=...source=/tmp/torus/{1,2,3}`.
-
 #### Running with Docker
 ##### With Host Networking
 ```
@@ -103,7 +90,7 @@ docker run \
 -e LISTEN_HTTP_PORT=4321 \
 -e PEER_ADDRESS=http://127.0.0.1:40000 \
 -e ETCD_HOST=127.0.0.1 \
-quay.io/coreos/torus
+alternativestorage/torus
 ```
 If you want to run more than one storage node on the host, you can do so by offsetting the ports.
 
@@ -116,7 +103,7 @@ docker run \
 -e STORAGE_SIZE=20GiB \
 -e PEER_ADDRESS=http://$NODE_IP:40000 \
 -e ETCD_HOST=127.0.0.1 \
-quay.io/coreos/torus
+alternativestorage/torus
 ```
 
 ### 4) Check that everything is reporting in
@@ -170,11 +157,9 @@ This creates a 10GiB virtual blockfile for use. It will be safely replicated and
 ### 7) Mount that volume via NBD
 
 ```
-sudo modprobe nbd
-sudo ./bin/torusblk --etcd 127.0.0.1:2379 nbd myVolume /dev/nbd0
+sudo modprobe target_core_user
+sudo ./bin/torusblk --etcd 127.0.0.1:2379 tcmu myVolume
 ```
-
-Specifying `/dev/nbd0` is optional -- it will pick the first available device if unspecified.
 
 The mount process is similar to FUSE for a block device; it will disconnect when killed, so make sure it's synced and unmounted.
 
@@ -182,9 +167,7 @@ If you can see the message `Attached to XXX. Server loop begins ... `, then you 
 You can format it and mount it using the standard tools you expect:
 
 ```
-sudo mkfs.ext4 /dev/nbd0
+sudo mkfs.ext4 /dev/torus/myVolume
 sudo mkdir -p /mnt/torus
-sudo mount /dev/nbd0 -o discard,noatime /mnt/torus
+sudo mount /dev/torus/myVolume -o discard,noatime /mnt/torus
 ```
-
-`torusblk nbd` supports the TRIM SSD command to accelerate garbage collecting; the `discard` option enables this.
