@@ -2,6 +2,7 @@ package ring
 
 import (
 	"fmt"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -90,5 +91,22 @@ func TestChangeReplication(t *testing.T) {
 	}
 	if !strings.Contains(newk.Describe(), fmt.Sprintf("Ring: Ketama\nReplication:%d\nPeers:", newRep)) {
 		t.Fatalf("Got wrong replications")
+	}
+}
+
+func TestMarshalUnmarshal(t *testing.T) {
+	k := makeTinyPeers(t)
+	// Marshal
+	b, err := k.Marshal()
+	if err != nil {
+		t.Fatal(err)
+	}
+	r, err := Unmarshal(b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	// Unmarshal
+	if !reflect.DeepEqual(r, k) {
+		t.Fatalf("Got wrong ring %+v, expected %+v", r, k)
 	}
 }
