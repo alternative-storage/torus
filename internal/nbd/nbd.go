@@ -393,11 +393,11 @@ func (h *reqHeader) offset() int64 {
 }
 
 func (h *reqHeader) resize(buf []byte) []byte {
-	if n := int(h.length()) + 16; n > cap(buf) {
+	var n int
+	if n = int(h.length()) + 16; n > cap(buf) {
 		return make([]byte, n)
-	} else {
-		return buf[:n]
 	}
+	return buf[:n]
 }
 
 func (h *reqHeader) putReplyHeader(dst []byte, err uint32) {

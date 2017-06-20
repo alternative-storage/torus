@@ -323,7 +323,7 @@ func (c *etcdCtx) GetVolume(volume string) (*models.Volume, error) {
 		return nil, err
 	}
 	if len(resp.Kvs) == 0 {
-		return nil, errors.New(fmt.Sprintf("etcd: volume %q not found", volume))
+		return nil, fmt.Errorf("etcd: volume %q not found", volume)
 
 	}
 	vid := BytesToUint64(resp.Kvs[0].Value)
@@ -332,7 +332,7 @@ func (c *etcdCtx) GetVolume(volume string) (*models.Volume, error) {
 		return nil, err
 	}
 	if len(resp.Kvs) == 0 {
-		return nil, errors.New(fmt.Sprintf("etcd: volume ID %q not found", Uint64ToHex(vid)))
+		return nil, fmt.Errorf("etcd: volume ID %q not found", Uint64ToHex(vid))
 
 	}
 	v := &models.Volume{}

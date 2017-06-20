@@ -453,9 +453,8 @@ func (d *deviceBlock) findRealBlockOffset(b torus.BlockRef, currentBlockOffset u
 		if h.Volume == uint64(b.Volume()) && h.Inode == uint64(b.INode) && h.Index == uint64(b.Index) {
 			if h.Location == 0 {
 				return currentBlockOffset, true, nil
-			} else {
-				return d.findRealBlockOffset(b, h.Location)
 			}
+			return d.findRealBlockOffset(b, h.Location)
 		}
 	}
 

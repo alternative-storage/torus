@@ -52,7 +52,7 @@ func Fsck(verbose bool, deviceName string, torusBlockSize uint64) error {
 	jumpSize := blockDevice.BlockSize + torusBlockSize
 	currOffset := blockDevice.MetadataSize
 	index := 0
-	var usedBlocks uint64 = 0
+	var usedBlocks uint64
 	for {
 		index++
 		if currOffset >= deviceSize {

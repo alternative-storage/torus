@@ -1,4 +1,4 @@
-// ring is the package containing implementations of the consistent hash ring, a
+// Package ring is the package containing implementations of the consistent hash ring, a
 // pure function which provides a permutation of peers where a block can live,
 // known by all members of the cluster.
 package ring

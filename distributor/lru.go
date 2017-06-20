@@ -36,15 +36,14 @@ func (lru *cache) Put(key string, value interface{}) {
 	if v, ok := lru.get(key); ok {
 		if reflect.DeepEqual(v, value) {
 			return
+		}
+		// Actually find() is not necessary, but it makes sure to remove
+		// correct element and the find loop would be finished soon, since
+		// the element is in the front now.
+		if old := lru.find(lru.priority.Front(), v); old != nil {
+			lru.priority.Remove(old)
 		} else {
-			// Actually find() is not necessary, but it makes sure to remove
-			// correct element and the find loop would be finished soon, since
-			// the element is in the front now.
-			if old := lru.find(lru.priority.Front(), v); old != nil {
-				lru.priority.Remove(old)
-			} else {
-				clog.Fatalf("read cache is corrupted. Please restart the process.")
-			}
+			clog.Fatalf("read cache is corrupted. Please restart the process.")
 		}
 	}
 	if len(lru.cache) == lru.maxSize {
