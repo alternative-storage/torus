@@ -1,4 +1,4 @@
-// flagconfig is a generic set of flags dedicated to configuring a Torus client.
+// Package flagconfig is a generic set of flags dedicated to configuring a Torus client.
 package flagconfig
 
 import (

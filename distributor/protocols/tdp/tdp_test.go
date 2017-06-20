@@ -231,7 +231,7 @@ func TestPutBlockGRPC(t *testing.T) {
 func TestRebalanceCheck(t *testing.T) {
 	test := make([]torus.BlockRef, nchecks)
 	m := &mockBlockRPC{}
-	for i, _ := range test {
+	for i := range test {
 		test[i].Index = 3
 		test[i].INodeRef = torus.NewINodeRef(1, torus.INodeID(rand.Intn(40)))
 	}
@@ -412,7 +412,7 @@ func BenchmarkGRPCPutBlock(b *testing.B) {
 func BenchmarkRebalanceCheck(b *testing.B) {
 	test := make([]torus.BlockRef, nchecks)
 	m := &mockBlockRPC{}
-	for i, _ := range test {
+	for i := range test {
 		test[i].Index = 3
 		test[i].INodeRef = torus.NewINodeRef(1, torus.INodeID(rand.Intn(40)))
 	}
@@ -452,7 +452,7 @@ func BenchmarkRebalanceCheck(b *testing.B) {
 func BenchmarkGRPCRebalanceCheck(b *testing.B) {
 	test := make([]torus.BlockRef, nchecks)
 	m := &mockBlockGRPC{}
-	for i, _ := range test {
+	for i := range test {
 		test[i].Index = 3
 		test[i].INodeRef = torus.NewINodeRef(1, torus.INodeID(rand.Intn(40)))
 	}

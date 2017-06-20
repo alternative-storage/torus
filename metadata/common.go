@@ -1,4 +1,4 @@
-// metadata is the metapackage for the implementations of the metadata
+// Package metadata is the metapackage for the implementations of the metadata
 // interface, for each potential backend.
 package metadata
 

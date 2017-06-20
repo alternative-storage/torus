@@ -41,6 +41,12 @@ vet: tools/glide
 fmt: tools/glide
 	go fmt $(shell $(GLIDE) novendor)
 
+.PHONY: lint
+lint:
+	@for dir in $(shell $(GLIDE) novendor); do \
+		golint $$dir; \
+	done;
+
 .PHONY: clean
 clean:
 	rm -rf ./local-cluster ./bin/torus*

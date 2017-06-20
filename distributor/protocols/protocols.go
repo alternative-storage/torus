@@ -1,4 +1,4 @@
-// protocols is the metapackage for the RPC protocols for how Torus' storage
+// Package protocols is the metapackage for the RPC protocols for how Torus' storage
 // layer communicates with other storage servers.
 package protocols
 

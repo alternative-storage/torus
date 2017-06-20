@@ -1,4 +1,4 @@
-// rebalance provides the implementation of the rebalancer, which continually
+// Package rebalance provides the implementation of the rebalancer, which continually
 // checks the data stored on a host, knows where data should live, and moves it
 // to the appropriate servers.
 package rebalance
