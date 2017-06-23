@@ -21,7 +21,7 @@ import (
 
 const (
 	defaultTorusConfig = "/.torus/config.json"
-	defaultEtcdAddress = "127.0.0.1:2379"
+	defaultEtcdAddress = "http://127.0.0.1:2379"
 )
 
 var (
@@ -44,7 +44,7 @@ func AddConfigFlags(set *flag.FlagSet) {
 	set.StringVarP(&readCacheSizeStr, "read-cache-size", "", "50MiB", "Amount of memory to use for read cache")
 	set.StringVarP(&readLevel, "read-level", "", "block", "Read replication level (spread, seq or block)")
 	set.StringVarP(&writeLevel, "write-level", "", "all", "Write replication level (all, one or local)")
-	set.StringVarP(&etcdAddress, "etcd", "C", "", "Address for talking to etcd (default \"127.0.0.1:2379\")")
+	set.StringVarP(&etcdAddress, "etcd", "C", "", "Address for talking to etcd (default \"http://127.0.0.1:2379\")")
 	set.StringVarP(&etcdCertFile, "etcd-cert-file", "", "", "Certificate to use to authenticate against etcd")
 	set.StringVarP(&etcdKeyFile, "etcd-key-file", "", "", "Key for Certificate")
 	set.StringVarP(&etcdCAFile, "etcd-ca-file", "", "", "CA to authenticate etcd against")

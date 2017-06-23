@@ -195,15 +195,10 @@ func runServer(cmd *cobra.Command, args []string) error {
 	if peerAddress != "" {
 		var u *url.URL
 
-		u, err = url.Parse(peerAddress)
+		u, err = addrToUri(peerAddress)
 		if err != nil {
 			return fmt.Errorf("couldn't parse peer address %s: %s", peerAddress, err)
 		}
-
-		if u.Scheme == "" {
-			return fmt.Errorf("Peer address %s does not have URL scheme (http:// or tdp://)", peerAddress)
-		}
-
 		err = distributor.ListenReplication(srv, u)
 	} else {
 		err = distributor.OpenReplication(srv)
