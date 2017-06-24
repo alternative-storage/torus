@@ -73,8 +73,8 @@ will tell you more, check the docs, or feel free to ask in IRC.
 ### 3) Run some storage nodes
 #### Running manually
 ```
-./bin/torusd --etcd 127.0.0.1:2379 --peer-address http://127.0.0.1:40000 --data-dir /tmp/torus1 --size 20GiB
-./bin/torusd --etcd 127.0.0.1:2379 --peer-address http://127.0.0.1:40001 --data-dir /tmp/torus2 --size 20GiB
+./bin/torusd --etcd http://127.0.0.1:2379 --peer-address http://127.0.0.1:40000 --data-dir /tmp/torus1 --size 20GiB
+./bin/torusd --etcd http://127.0.0.1:2379 --peer-address http://127.0.0.1:40001 --data-dir /tmp/torus2 --size 20GiB
 ```
 This runs a storage node without HTTP. Add `--host` and `--port` to open the HTTP endpoint for [monitoring](monitoring.md).
 
@@ -89,7 +89,7 @@ docker run \
 -e STORAGE_SIZE=20GiB \
 -e LISTEN_HTTP_PORT=4321 \
 -e PEER_ADDRESS=http://127.0.0.1:40000 \
--e ETCD_HOST=127.0.0.1 \
+-e ETCD_HOST=http://127.0.0.1 \
 alternativestorage/torus
 ```
 If you want to run more than one storage node on the host, you can do so by offsetting the ports.
