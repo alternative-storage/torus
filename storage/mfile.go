@@ -29,8 +29,6 @@ type mfileBlock struct {
 	lastFree  int
 	name      string
 	blocksize uint64
-
-	itPool sync.Pool
 	// NB: Still room for improvement. Free lists, smart allocation, etc.
 }
 
