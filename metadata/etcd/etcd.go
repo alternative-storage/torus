@@ -445,7 +445,7 @@ func (c *etcdCtx) CommitINodeIndex(vid torus.VolumeID) (torus.INodeID, error) {
 	if err != nil {
 		return 0, err
 	}
-	clog.Tracef("commited inode index: %v", vid)
+	clog.Tracef("committed inode index: %v", vid)
 	return torus.INodeID(newID.(uint64)), nil
 }
 

@@ -10,7 +10,7 @@ import (
 func (e *Etcd) watchRingUpdates() error {
 	r, err := e.GetRing()
 	if err != nil {
-		clog.Errorf("can't get inital ring: %s", err)
+		clog.Errorf("can't get initial ring: %s", err)
 		return err
 	}
 	go e.watchRing(r)

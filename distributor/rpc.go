@@ -31,7 +31,7 @@ func (d *Distributor) Block(ctx context.Context, ref torus.BlockRef) ([]byte, er
 	return data, nil
 }
 
-// PutBlock server side implementaion which is called from RPC client.
+// PutBlock server side implementation which is called from RPC client.
 func (d *Distributor) PutBlock(ctx context.Context, ref torus.BlockRef, data []byte) error {
 	tracer := opentracing.GlobalTracer()
 	if span := opentracing.SpanFromContext(ctx); span != nil {
