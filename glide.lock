@@ -1,10 +1,12 @@
-hash: da7792839b9e11d41554dd51029399c1bd178f3bd7363692a2cb746aa0073531
-updated: 2017-06-14T21:25:28.399459906+09:00
+hash: 299b36d23deab966579d2efc5e012dacef0a30d4826328a4f170fa0d7185fd4c
+updated: 2017-08-19T19:11:18.967081111+09:00
 imports:
 - name: github.com/alternative-storage/go-tcmu
   version: 5db4f4011c3aa62b8a1436c86e373a014b8317a0
   subpackages:
   - scsi
+- name: github.com/AndreasBriese/bbloom
+  version: 28f7e881ca57bc00e028f9ede9f0d9104cfeef5e
 - name: github.com/apache/thrift
   version: 53dd39833a08ce33582e5ff31fa18bb4735d6731
   subpackages:
@@ -40,6 +42,13 @@ imports:
   - progressutil
 - name: github.com/DeanThompson/ginpprof
   version: 18e555cdf1a9504a2fb2a42c112c7e4a79fc3853
+- name: github.com/dgraph-io/badger
+  version: fb35250eb8faec89c1aa5734914cb39e275f27ed
+  subpackages:
+  - protos
+  - skl
+  - table
+  - "y"
 - name: github.com/dustin/go-humanize
   version: 88e58c26e9fe8ac578a0d76a68e32838acf17a8d
 - name: github.com/glycerine/go-unsnap-stream
@@ -95,6 +104,8 @@ imports:
   version: a97ce2ca70fa5a848076093f05e639a89ca34d06
 - name: github.com/philhofer/fwd
   version: 98c11a7a6ec829d672b03833c3d69a7fae1ca972
+- name: github.com/pkg/errors
+  version: c605e284fe17294bda444b34710735b29d1a9d90
 - name: github.com/prometheus/client_golang
   version: c5b7fccd204277076155f10851dad72b76a49317
   subpackages:
@@ -156,7 +167,7 @@ imports:
   subpackages:
   - ssh/terminal
 - name: golang.org/x/net
-  version: dfe83d419c9403b40b19d08cdba2afec27b002f7
+  version: 1c05540f6879653db88113bc4a2b70aec4bd491f
   repo: https://go.googlesource.com/net
   subpackages:
   - bpf

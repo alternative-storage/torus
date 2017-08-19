@@ -2,6 +2,7 @@ package torustcmu
 
 import (
 	"fmt"
+	//	"runtime"
 
 	"github.com/alternative-storage/go-tcmu"
 	"github.com/alternative-storage/go-tcmu/scsi"
@@ -24,7 +25,7 @@ func ConnectAndServe(f *block.BlockFile, name string, closer chan bool) error {
 	}
 	// TODO(nak3): Scale up NBD by handling multiple requests.
 	// Requires thread-safety across the block.BlockFile/torus.File
-	//n := runtime.GOMAXPROCS(0) - 1
+	// n := runtime.GOMAXPROCS(0) - 1
 	n := 1
 
 	h := &tcmu.SCSIHandler{
