@@ -40,6 +40,7 @@ var (
 	peerAddress string
 	sizeStr     string
 	debugInit   bool
+	kvStore     bool
 	autojoin    bool
 	logpkg      string
 	cfg         torus.Config
@@ -64,6 +65,7 @@ var rootCommand = &cobra.Command{
 
 func init() {
 	rootCommand.PersistentFlags().StringVarP(&blockDevice, "block-device", "", "", "Path to a torus formatted block device")
+	rootCommand.PersistentFlags().BoolVarP(&kvStore, "kvstore", "", false, "Use kv store for backend storage")
 	rootCommand.PersistentFlags().StringVarP(&dataDir, "data-dir", "", "torus-data", "Path to the data directory")
 	rootCommand.PersistentFlags().BoolVarP(&debug, "debug", "", false, "Turn on debug output")
 	rootCommand.PersistentFlags().BoolVarP(&debugInit, "debug-init", "", false, "Run a default init for the MDS if one doesn't exist")
@@ -159,6 +161,10 @@ func runServer(cmd *cobra.Command, args []string) error {
 	switch {
 	case cfg.MetadataAddress == "":
 		srv, err = torus.NewServer(cfg, "temp", "mfile")
+	case kvStore:
+		srv, err = torus.NewServer(cfg, "etcd", "badger")
+	case blockDevice != "":
+		srv, err = torus.NewServer(cfg, "etcd", "block_device")
 	case debugInit:
 		err = torus.InitMDS("etcd", cfg, torus.GlobalMetadata{
 			BlockSize:        512 * 1024,
@@ -172,8 +178,6 @@ func runServer(cmd *cobra.Command, args []string) error {
 			}
 		}
 		fallthrough
-	case blockDevice != "":
-		srv, err = torus.NewServer(cfg, "etcd", "block_device")
 	default:
 		srv, err = torus.NewServer(cfg, "etcd", "mfile")
 	}

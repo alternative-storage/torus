@@ -1,5 +1,6 @@
 package: github.com/alternative-storage/torus
 import:
+- package: github.com/dgraph-io/badger
 - package: github.com/DeanThompson/ginpprof
 - package: github.com/RoaringBitmap/roaring
 - package: github.com/barakmich/mmap-go
