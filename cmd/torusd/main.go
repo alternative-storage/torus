@@ -209,7 +209,8 @@ func runServer(cmd *cobra.Command, args []string) error {
 		for _ = range signalChan {
 			fmt.Println("\nReceived an interrupt, stopping services...")
 			close(mainClose)
-			os.Exit(0)
+			// return here to call defer srv.Close()
+			return
 		}
 	}()
 
